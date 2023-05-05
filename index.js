@@ -1,9 +1,9 @@
-import { ApolloServer } from "@apollo/server";
-import { startStandaloneServer } from "@apollo/server/standalone";
-import User from "./models/User.js";
-import Post from "./models/Post.js";
-import Forum from "./models/Forum.js";
-import Comment from "./models/Comment.js";
+const { ApolloServer } = require("@apollo/server");
+const { startStandaloneServer } = require("@apollo/server/standalone");
+const User = require("./models/User.js");
+const Post = require("./models/Post.js");
+const Forum = require("./models/Forum.js");
+const Comment = require("./models/Comment.js");
 
 const typeDefs = `#graphql
 
@@ -52,19 +52,19 @@ const typeDefs = `#graphql
   }
 
   input SignUpInput {
-    username: String!
-    email: String!
-    password: String!
-    role: String!
-    nativeLanguage: String!
+    username: String
+    email: String
+    password: String
+    role: String
+    nativeLanguage: String
     targetLanguage: [String]
   }
 
   input PostInput {
-    userId: String!
-    content: String!
-    title: String!
-    forumId: String!
+    userId: String
+    content: String
+    title: String
+    forumId: String
   }
 
   input CommentInput {
@@ -74,7 +74,7 @@ const typeDefs = `#graphql
   }
 
   input ForumInput {
-    name: String!
+    name: String
   }
 
   type Query {
@@ -87,14 +87,14 @@ const typeDefs = `#graphql
 
   type Mutation {
     insertNewUser(input: SignUpInput!): User
-    deleteUserById(id: String): ResponseMessage
+    deleteUserById(id: String!): ResponseMessage
     insertNewPost(input: PostInput!): Post
     updatePostById(input: PostInput!, id: String): Post
-    deletePostById(id: String): ResponseMessage
+    deletePostById(id: String!): ResponseMessage
     insertForums(input: [ForumInput]!): ResponseMessage
-    deleteForumById(id: String): ResponseMessage
+    deleteForumById(id: String!): ResponseMessage
     insertComment(input: CommentInput!): Comment
-    deleteCommentById(id: String): ResponseMessage
+    deleteCommentById(id: String!): ResponseMessage
   }
 `;
 
@@ -300,8 +300,8 @@ const server = new ApolloServer({
   resolvers,
 });
 
-const { url } = await startStandaloneServer(server, {
+startStandaloneServer(server, {
   listen: { port: 4000 },
-});
+}).then(({ url }) => console.log(`🚀  Server ready at: ${url}`));
 
-console.log(`🚀  Server ready at: ${url}`);
+module.exports = { typeDefs, resolvers };

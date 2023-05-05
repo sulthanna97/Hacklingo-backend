@@ -1,4 +1,4 @@
-import mongoose from "../config/connectToMongoDB.js";
+const mongoose = require("../config/connectToMongoDB.js");
 const { Schema } = mongoose;
 
 const forumSchema = new Schema(
@@ -20,4 +20,4 @@ const forumSchema = new Schema(
 
 const Forum = mongoose.model("Forum", forumSchema);
 
-export default Forum;
+module.exports = Forum;

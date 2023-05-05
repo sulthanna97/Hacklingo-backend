@@ -4,7 +4,7 @@
   "description": "Backend Repository for Hacklingo App",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "npx jest --forceExit --runInBand",
     "start": "nodemon index.js"
   },
   "repository": {
@@ -18,11 +18,13 @@
     "url": "https://github.com/sulthanna97/Hacklingo-backend/issues"
   },
   "homepage": "https://github.com/sulthanna97/Hacklingo-backend#readme",
-  "type": "module",
+  "type": "commonjs",
   "dependencies": {
     "@apollo/server": "^4.7.1",
     "graphql": "^16.6.0",
-    "mongoose": "^7.1.0"
+    "graphql-request": "^6.0.0",
+    "mongoose": "^7.1.0",
+    "mongoose-beautiful-unique-validation": "^7.1.1"
   },
   "devDependencies": {
     "jest": "^29.5.0",

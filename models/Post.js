@@ -1,4 +1,4 @@
-import mongoose from "../config/connectToMongoDB.js";
+const mongoose =require("../config/connectToMongoDB.js");
 const { Schema } = mongoose;
 
 const postSchema = new Schema(
@@ -31,4 +31,4 @@ const postSchema = new Schema(
 
 const Post = mongoose.model("Post", postSchema);
 
-export default Post;
+module.exports = Post;

@@ -1,0 +1,100 @@
+[
+  {
+    "input": {
+      "username": "test",
+      "email": "test@mail.com",
+      "password": "123456",
+      "nativeLanguage": "Indonesian/Bahasa Indonesia",
+      "targetLanguage": ["English", "Japanese", "German", "French"],
+      "role": "regular"
+    }
+  },
+  {
+    "input": {
+      "username": "test2",
+      "password": "123456",
+      "nativeLanguage": "Indonesian/Bahasa Indonesia",
+      "targetLanguage": ["English", "Japanese", "German", "French"],
+      "role": "regular"
+    }
+  },
+  {
+    "input": {
+      "username": "test3",
+      "email": "test2@mail.com",
+      "nativeLanguage": "Indonesian/Bahasa Indonesia",
+      "targetLanguage": ["English", "Japanese", "German", "French"],
+      "role": "regular"
+    }
+  },
+  {
+    "input": {
+      "username": "test4",
+      "email": "test3@mail.com",
+      "password": "123456",
+      "nativeLanguage": "Indonesian/Bahasa Indonesia",
+      "targetLanguage": ["English", "Japanese", "German", "French"],
+      "role": "adakjdd"
+    }
+  },
+  {
+    "input": {
+      "username": "test5",
+      "email": "test4@mail.com",
+      "password": "123456",
+      "nativeLanguage": "Indonesian",
+      "targetLanguage": ["English", "Japanese", "German", "French"],
+      "role": "regular"
+    }
+  },
+  {
+    "input": {
+      "username": "test",
+      "email": "tes5@mail.com",
+      "password": "123456",
+      "nativeLanguage": "Indonesian/Bahasa Indonesia",
+      "targetLanguage": ["English", "Japanese", "German", "French"],
+      "role": "regular"
+    }
+  },
+  {
+    "input": {
+      "username": "test7",
+      "email": "tes6@mail.com",
+      "password": "123456",
+      "nativeLanguage": "Indonesian/Bahasa Indonesia",
+      "targetLanguage": ["English", "Japanese", "German", "French"],
+      "role": "regular"
+    }
+  },
+  {
+    "input": {
+      "username": "test8",
+      "email": "",
+      "password": "123456",
+      "nativeLanguage": "Indonesian/Bahasa Indonesia",
+      "targetLanguage": ["English", "Japanese", "German", "French"],
+      "role": "regular"
+    }
+  },
+  {
+    "input": {
+      "username": "test8",
+      "email": "tes@mail.com",
+      "password": "",
+      "nativeLanguage": "Indonesian/Bahasa Indonesia",
+      "targetLanguage": ["English", "Japanese", "German", "French"],
+      "role": "regular"
+    }
+  },
+  {
+    "input": {
+      "username": "test8",
+      "email": "tes@mail.com",
+      "password": "123456",
+      "nativeLanguage": "Indonesian/Bahasa Indonesia",
+      "targetLanguage": ["English", "Japanese", "German", "French"],
+      "role": "regular"
+    }
+  }
+]

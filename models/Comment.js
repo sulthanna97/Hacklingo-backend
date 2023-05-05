@@ -1,4 +1,4 @@
-import mongoose from "../config/connectToMongoDB.js";
+const mongoose = require("../config/connectToMongoDB.js");
 const { Schema } = mongoose;
 
 const commentSchema = new Schema(
@@ -21,4 +21,4 @@ const commentSchema = new Schema(
 
 const Comment = mongoose.model("Comment", commentSchema);
 
-export default Comment;
+module.exports = Comment;
