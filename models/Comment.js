@@ -5,15 +5,15 @@ const commentSchema = new Schema(
   {
     userId: {
       type: String,
-      required: true
+      required: [true, "User Id is required"]
     },
     content: {
       type: String,
-      required: true,
+      required: [true, "Content is required"]
     },
     postId: {
       type: String,
-      required: true
+      required: [true, "Post Id is required"]
     }
   },
   { timestamps: true }

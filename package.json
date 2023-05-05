@@ -4,7 +4,8 @@
   "description": "Backend Repository for Hacklingo App",
   "main": "index.js",
   "scripts": {
-    "test": "npx jest --forceExit --runInBand",
+    "test": "npx jest --coverage --runInBand --forceExit",
+    "test_1": "npx jest --coverage --runInBand --forceExit -- testingSupertest.test.js",
     "start": "nodemon index.js"
   },
   "repository": {
