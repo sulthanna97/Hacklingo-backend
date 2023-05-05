@@ -5,19 +5,25 @@ const postSchema = new Schema(
   {
     userId: {
       type: Schema.ObjectId,
-      required: true,
+      required: [true, "User Id is required"],
     },
     title: {
       type: String,
-      required: true,
+      required: [true, "Title is required"],
+      validate: {
+        validator: (str) => {
+          return str.length <= 120;
+        },
+        message: "Max title length is 120 characters"
+      }
     },
     content: {
       type: String,
-      required: true, 
+      required: [true, "Content is required"], 
     },
     forumId: {
       type: Schema.Types.ObjectId,
-      required: true,
+      required: [true, "Forum Id is required"],
     },
     comments: [
       {
