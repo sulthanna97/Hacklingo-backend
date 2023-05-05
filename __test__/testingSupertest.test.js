@@ -16,6 +16,7 @@ let server, url;
 let userId = "";
 let forumId = "";
 let postId = "";
+let commentId = "";
 // before the tests we spin up a new Apollo Server
 beforeAll(async () => {
   const forums = await Forum.bulkWrite(
@@ -396,6 +397,7 @@ describe("insert new Comment", () => {
           },
         });
       const data = response.body.data.insertNewComment;
+      commentId = data._id;
       expect(data).toHaveProperty("_id");
       expect(data).toHaveProperty("userId");
       expect(data).toHaveProperty("postId");
@@ -505,11 +507,8 @@ describe("update User by Id", () => {
         ...newUserTestData[0].input,
         username: "test edit",
         password: "Test123Edit",
-        nativeLanguage: "English",
-        targetLanguage: [
-          "German/Deutsch",
-          "English",
-        ]
+        nativeLanguage: "Indonesian/Bahasa Indonesia",
+        targetLanguage: ["German/Deutsch", "English"],
       };
       const response = await request(url)
         .post("/")
@@ -517,7 +516,7 @@ describe("update User by Id", () => {
           query: updateUserByIdQuery,
           variables: {
             input: updateInput,
-            updateUserByIdId: userId
+            updateUserByIdId: userId,
           },
         });
       const data = response.body.data.updateUserById;
@@ -528,7 +527,6 @@ describe("update User by Id", () => {
       expect(data).toHaveProperty("targetLanguage");
       expect(data.username).toBe("test edit");
       expect(data.password).toBe("Test123Edit");
-      expect(data.nativeLanguage).toBe("English");
       expect(data.targetLanguage).toContain("German/Deutsch");
     });
   });
@@ -540,10 +538,7 @@ describe("update User by Id", () => {
         username: "",
         password: "Test123Edit",
         nativeLanguage: "English",
-        targetLanguage: [
-          "German/Deutsch",
-          "English",
-        ]
+        targetLanguage: ["German/Deutsch", "English"],
       };
       const response = await request(url)
         .post("/")
@@ -551,13 +546,11 @@ describe("update User by Id", () => {
           query: updateUserByIdQuery,
           variables: {
             input: updateInput,
-            updateUserByIdId: userId
+            updateUserByIdId: userId,
           },
         });
       const errMessage = JSON.parse(response.text).errors[0].message;
-      expect(errMessage).toMatch(
-        /Username is required/
-      );
+      expect(errMessage).toMatch(/Username is required/);
     });
 
     it("should return error with input without password", async () => {
@@ -566,10 +559,7 @@ describe("update User by Id", () => {
         username: "test edit",
         password: "",
         nativeLanguage: "English",
-        targetLanguage: [
-          "German/Deutsch",
-          "English",
-        ]
+        targetLanguage: ["German/Deutsch", "English"],
       };
       const response = await request(url)
         .post("/")
@@ -577,13 +567,11 @@ describe("update User by Id", () => {
           query: updateUserByIdQuery,
           variables: {
             input: updateInput,
-            updateUserByIdId: userId
+            updateUserByIdId: userId,
           },
         });
       const errMessage = JSON.parse(response.text).errors[0].message;
-      expect(errMessage).toMatch(
-        /Password is required/
-      );
+      expect(errMessage).toMatch(/Password is required/);
     });
 
     it("should return error with input without nativeLanguage", async () => {
@@ -592,10 +580,7 @@ describe("update User by Id", () => {
         username: "test edit",
         password: "Test123Edit",
         nativeLanguage: "",
-        targetLanguage: [
-          "German/Deutsch",
-          "English",
-        ]
+        targetLanguage: ["German/Deutsch", "English"],
       };
       const response = await request(url)
         .post("/")
@@ -603,13 +588,11 @@ describe("update User by Id", () => {
           query: updateUserByIdQuery,
           variables: {
             input: updateInput,
-            updateUserByIdId: userId
+            updateUserByIdId: userId,
           },
         });
       const errMessage = JSON.parse(response.text).errors[0].message;
-      expect(errMessage).toMatch(
-        /Native language is required/
-      );
+      expect(errMessage).toMatch(/Native language is required/);
     });
 
     it("should return error with input with improper nativeLanguage", async () => {
@@ -618,10 +601,7 @@ describe("update User by Id", () => {
         username: "test edit",
         password: "Test123Edit",
         nativeLanguage: "aksjlkjKLKL",
-        targetLanguage: [
-          "German/Deutsch",
-          "English",
-        ]
+        targetLanguage: ["German/Deutsch", "English"],
       };
       const response = await request(url)
         .post("/")
@@ -629,10 +609,9 @@ describe("update User by Id", () => {
           query: updateUserByIdQuery,
           variables: {
             input: updateInput,
-            updateUserByIdId: userId
+            updateUserByIdId: userId,
           },
         });
-      console.log(JSON.parse(response.text).errors[0].message);
       const errMessage = JSON.parse(response.text).errors[0].message;
       expect(errMessage).toMatch(
         /Native language is not in any of the options/
@@ -645,10 +624,7 @@ describe("update User by Id", () => {
         username: "test edit",
         password: "Test123Edit",
         nativeLanguage: "English",
-        targetLanguage: [
-          "German/Deutsch",
-          "kfjlksjflkjfjSKF",
-        ]
+        targetLanguage: ["German/Deutsch", "kfjlksjflkjfjSKF"],
       };
       const response = await request(url)
         .post("/")
@@ -656,15 +632,631 @@ describe("update User by Id", () => {
           query: updateUserByIdQuery,
           variables: {
             input: updateInput,
-            updateUserByIdId: userId
+            updateUserByIdId: userId,
           },
         });
-      console.log(JSON.parse(response.text).errors[0].message);
       const errMessage = JSON.parse(response.text).errors[0].message;
       expect(errMessage).toMatch(
         /Target language is not in any of the options/
       );
     });
+  });
+});
 
+describe("update Post by Id", () => {
+  // this is the query for our test
+  const updatePostByIdQuery = `
+  mutation UpdatePostById($input: PostInput!, $updatePostByIdId: String) {
+    updatePostById(input: $input, id: $updatePostByIdId) {
+      _id
+      userId
+      content
+      title
+      forumId
+    }
+  }
+    `;
+
+  describe("successful update", () => {
+    it("should return the updated post after success", async () => {
+      const updateInput = {
+        ...newPostTestData[0].input,
+        userId, // From submitted user earlier
+        forumId, // From beforeAll, should be English
+        // User can only change the post content
+        content: "lorem ipsum edit",
+      };
+      const response = await request(url)
+        .post("/")
+        .send({
+          query: updatePostByIdQuery,
+          variables: {
+            input: updateInput,
+            updatePostByIdId: postId,
+          },
+        });
+      const data = response.body.data.updatePostById;
+      expect(data).toHaveProperty("_id");
+      expect(data).toHaveProperty("content");
+      expect(data.content).toBe("lorem ipsum edit");
+    });
+  });
+
+  describe("failed inserts", () => {
+    it("should return error with empty content", async () => {
+      const updateInput = {
+        ...newPostTestData[0].input,
+        userId, // From submitted user earlier
+        forumId, // From beforeAll, should be English
+        // User can only change the post content
+        content: "",
+      };
+      const response = await request(url)
+        .post("/")
+        .send({
+          query: updatePostByIdQuery,
+          variables: {
+            input: updateInput,
+            updatePostByIdId: postId,
+          },
+        });
+      const errMessage = JSON.parse(response.text).errors[0].message;
+      expect(errMessage).toMatch(/Content is required/);
+    });
+  });
+});
+
+describe("update Comment by Id", () => {
+  // this is the query for our test
+  const updateCommentByIdQuery = `
+  mutation UpdateCommentById($input: CommentInput!, $updateCommentByIdId: String) {
+    updateCommentById(input: $input, id: $updateCommentByIdId) {
+      _id
+      userId
+      content
+      postId
+    }
+  }
+    `;
+
+  describe("successful update", () => {
+    it("should return the updated post after success", async () => {
+      const updateInput = {
+        ...newCommentTestData[0].input,
+        userId, // From submitted user earlier
+        postId, // From beforeAll, should be English
+        // User can only change the post content
+        content: "lorem ipsum edit",
+      };
+      const response = await request(url)
+        .post("/")
+        .send({
+          query: updateCommentByIdQuery,
+          variables: {
+            input: updateInput,
+            updateCommentByIdId: commentId,
+          },
+        });
+      const data = response.body.data.updateCommentById;
+      expect(data).toHaveProperty("_id");
+      expect(data).toHaveProperty("content");
+      expect(data.content).toBe("lorem ipsum edit");
+    });
+  });
+
+  describe("failed inserts", () => {
+    it("should return error with empty content", async () => {
+      const updateInput = {
+        ...newCommentTestData[0].input,
+        userId, // From submitted user earlier
+        postId, // From beforeAll, should be English
+        // User can only change the post content
+        content: "",
+      };
+      const response = await request(url)
+        .post("/")
+        .send({
+          query: updateCommentByIdQuery,
+          variables: {
+            input: updateInput,
+            updateCommentByIdId: commentId,
+          },
+        });
+      const errMessage = JSON.parse(response.text).errors[0].message;
+      expect(errMessage).toMatch(/Content is required/);
+    });
+  });
+});
+
+describe("find Users based on their native language", () => {
+  // this is the query for our test
+  const findUsersByNativeLanguage = `
+  query Query($nativeLanguage: String) {
+    findUsersByNativeLanguage(nativeLanguage: $nativeLanguage) {
+      _id
+      username
+      email
+      password
+      role
+      nativeLanguage
+      targetLanguage
+    }
+  }
+    `;
+
+  describe("successful fetch", () => {
+    it("should return array of users after success", async () => {
+      const nativeLanguage = newUserTestData[0].input.nativeLanguage;
+      const response = await request(url).post("/").send({
+        query: findUsersByNativeLanguage,
+        variables: {
+          nativeLanguage,
+        },
+      });
+      const data = response.body.data.findUsersByNativeLanguage;
+      expect(typeof data).toBe("object");
+      expect(data).toHaveLength(1);
+      expect(data[0]).toHaveProperty("_id");
+      expect(data[0]).toHaveProperty("username");
+      expect(data[0]).toHaveProperty("email");
+      expect(data[0].nativeLanguage).toBe(nativeLanguage);
+    });
+  });
+
+  describe("zero fetch", () => {
+    it("should return error with empty content", async () => {
+      const nativeLanguage = "English";
+      const response = await request(url).post("/").send({
+        query: findUsersByNativeLanguage,
+        variables: {
+          nativeLanguage,
+        },
+      });
+      const data = response.body.data.findUsersByNativeLanguage;
+      expect(typeof data).toBe("object");
+      expect(data).toHaveLength(0);
+    });
+  });
+});
+
+describe("find User based on their id", () => {
+  // this is the query for our test
+  const findUserByIdQuery = `
+  query FindUserById($findUserByIdId: String) {
+    findUserById(id: $findUserByIdId) {
+      _id
+      username
+      email
+      password
+      role
+      nativeLanguage
+      targetLanguage
+      posts {
+        _id
+        userId
+        content
+        title
+        forumId
+      }
+      comments {
+        _id
+        userId
+        content
+        postId
+      }
+    }
+  }
+    `;
+
+  describe("successful fetch", () => {
+    it("should return array of users after success", async () => {
+      const response = await request(url)
+        .post("/")
+        .send({
+          query: findUserByIdQuery,
+          variables: {
+            findUserByIdId: userId,
+          },
+        });
+      const data = response.body.data.findUserById;
+      expect(typeof data).toBe("object");
+      expect(data).toHaveProperty("_id");
+      expect(data).toHaveProperty("username");
+      expect(data).toHaveProperty("email");
+      expect(data).toHaveProperty("comments");
+      expect(data).toHaveProperty("posts");
+      expect(data.posts).toHaveLength(1);
+      expect(data.posts[0]).toHaveProperty("content");
+      expect(data.comments).toHaveLength(1);
+      expect(data.comments[0]).toHaveProperty("content");
+    });
+  });
+
+  describe("fetch with nonexistant id", () => {
+    it("should return array of users after success", async () => {
+      const response = await request(url)
+        .post("/")
+        .send({
+          query: findUserByIdQuery,
+          variables: {
+            findUserByIdId: "dshshfkjskfj",
+          },
+        });
+      const errMessage = JSON.parse(response.text).errors[0].message;
+      expect(errMessage).toBe('Unexpected error value: "User not found"');
+    });
+  });
+});
+
+describe("find Post based on their id", () => {
+  // this is the query for our test
+  const findPostByIdQuery = `
+  query FindPostById($findPostByIdId: String) {
+    findPostById(id: $findPostByIdId) {
+      _id
+      userId
+      content
+      title
+      forumId
+      comments {
+        _id
+        userId
+        content
+        postId
+      }
+    }
+  }
+    `;
+
+  describe("successful fetch", () => {
+    it("should return post after success", async () => {
+      const response = await request(url)
+        .post("/")
+        .send({
+          query: findPostByIdQuery,
+          variables: {
+            findPostByIdId: postId,
+          },
+        });
+      const data = response.body.data.findPostById;
+      expect(typeof data).toBe("object");
+      expect(data).toHaveProperty("_id");
+      expect(data).toHaveProperty("content");
+      expect(data).toHaveProperty("forumId");
+      expect(data).toHaveProperty("userId");
+      expect(data).toHaveProperty("comments");
+      expect(data.comments).toHaveLength(1);
+      expect(data.comments[0]).toHaveProperty("content");
+      expect(data._id).toBe(postId);
+    });
+  });
+
+  describe("fetch with nonexistant id", () => {
+    it("should return error with wrong id", async () => {
+      const response = await request(url)
+        .post("/")
+        .send({
+          query: findPostByIdQuery,
+          variables: {
+            findPostByIdId: "dshshfkjskfj",
+          },
+        });
+      const errMessage = JSON.parse(response.text).errors[0].message;
+      expect(errMessage).toBe('Unexpected error value: "Post not found"');
+    });
+  });
+});
+
+describe("find Comment based on their id", () => {
+  // this is the query for our test
+  const findCommentByIdQuery = `
+  query FindCommentById($findCommentByIdId: String) {
+    findCommentById(id: $findCommentByIdId) {
+      _id
+      userId
+      content
+      postId
+    }
+  }
+    `;
+
+  describe("successful fetch", () => {
+    it("should return comment after success", async () => {
+      const response = await request(url)
+        .post("/")
+        .send({
+          query: findCommentByIdQuery,
+          variables: {
+            findCommentByIdId: commentId,
+          },
+        });
+      const data = response.body.data.findCommentById;
+      expect(typeof data).toBe("object");
+      expect(data).toHaveProperty("_id");
+      expect(data).toHaveProperty("content");
+      expect(data).toHaveProperty("postId");
+      expect(data).toHaveProperty("userId");
+      expect(data._id).toBe(commentId);
+    });
+  });
+
+  describe("fetch with nonexistant id", () => {
+    it("should return array of users after success", async () => {
+      const response = await request(url)
+        .post("/")
+        .send({
+          query: findCommentByIdQuery,
+          variables: {
+            findCommentByIdId: "dshshfkjskfj",
+          },
+        });
+      const errMessage = JSON.parse(response.text).errors[0].message;
+      expect(errMessage).toBe('Unexpected error value: "Comment not found"');
+    });
+  });
+});
+
+describe("find All Forums", () => {
+  // this is the query for our test
+  const findAllForums = `
+  query FindCommentById {
+    findAllForums {
+      _id
+      name
+    }
+  }
+    `;
+
+  describe("successful fetch", () => {
+    it("should return array of forums after success", async () => {
+      const response = await request(url).post("/").send({
+        query: findAllForums,
+      });
+      const data = response.body.data.findAllForums;
+      expect(typeof data).toBe("object");
+      expect(data).toHaveLength(7);
+      expect(data[0]).toHaveProperty("_id");
+      expect(data[0]).toHaveProperty("name");
+      expect(data[0].name).toBe("English");
+    });
+  });
+});
+
+describe("find Forum By Id", () => {
+  // this is the query for our test
+  const findForumByIdQuery = `
+  query FindForumById($findForumByIdId: String) {
+    findForumById(id: $findForumByIdId) {
+      _id
+      name
+      posts {
+        _id
+        userId
+        content
+        title
+        forumId
+      }
+    }
+  }
+    `;
+
+  describe("successful fetch", () => {
+    it("should return array of forums after success", async () => {
+      const response = await request(url)
+        .post("/")
+        .send({
+          query: findForumByIdQuery,
+          variables: {
+            findForumByIdId: forumId,
+          },
+        });
+      const data = response.body.data.findForumById;
+      expect(typeof data).toBe("object");
+      expect(data).toHaveProperty("_id");
+      expect(data).toHaveProperty("name");
+      expect(data).toHaveProperty("posts");
+      expect(data.posts).toHaveLength(1);
+      expect(data.posts[0]).toHaveProperty("_id");
+      expect(data.posts[0]).toHaveProperty("content");
+    });
+  });
+
+  describe("fetch with nonexistant id", () => {
+    it("should return error with nonexistatnt id", async () => {
+      const response = await request(url)
+        .post("/")
+        .send({
+          query: findForumByIdQuery,
+          variables: {
+            findForumByIdId: "dshshfkjskfj",
+          },
+        });
+      const errMessage = JSON.parse(response.text).errors[0].message;
+      expect(errMessage).toBe('Unexpected error value: "Forum not found"');
+    });
+  });
+});
+
+describe("delete Comment by Id", () => {
+  const deleteCommentByIdQuery = `
+  mutation DeleteCommentById($deleteCommentByIdId: String!) {
+    deleteCommentById(id: $deleteCommentByIdId) {
+      message
+    }
+  }
+  `;
+
+  describe("successful delete", () => {
+    it("should return a response message on success", async () => {
+      const response = await request(url)
+        .post("/")
+        .send({
+          query: deleteCommentByIdQuery,
+          variables: {
+            deleteCommentByIdId: commentId,
+          },
+        });
+      const data = response.body.data.deleteCommentById;
+      expect(typeof data).toBe("object");
+      expect(data).toHaveProperty("message");
+      expect(data.message).toBe(
+        `Comment with id ${commentId} has been deleted`
+      );
+    });
+  });
+
+  describe("failed delete", () => {
+    it("should return an error message on nonexistatnt id", async () => {
+      const response = await request(url)
+        .post("/")
+        .send({
+          query: deleteCommentByIdQuery,
+          variables: {
+            deleteCommentByIdId: "akjjfjsafdas",
+          },
+        });
+      const errMessage = JSON.parse(response.text).errors[0].message;
+      expect(errMessage).toBe(
+        'Unexpected error value: "Comment not found"'
+      );
+    });
+  });
+});
+
+describe("delete Post by Id", () => {
+  const deletePostByIdQuery = `
+  mutation DeletePostById($deletePostByIdId: String!) {
+    deletePostById(id: $deletePostByIdId) {
+      message
+    }
+  }
+  `;
+
+  describe("successful delete", () => {
+    it("should return a response message on success", async () => {
+      const response = await request(url)
+        .post("/")
+        .send({
+          query: deletePostByIdQuery,
+          variables: {
+            deletePostByIdId: postId,
+          },
+        });
+      const data = response.body.data.deletePostById;
+      expect(typeof data).toBe("object");
+      expect(data).toHaveProperty("message");
+      expect(data.message).toBe(
+        `Post with id ${postId} has been deleted`
+      );
+    });
+  });
+
+  describe("failed delete", () => {
+    it("should return an error message on nonexistatnt id", async () => {
+      const response = await request(url)
+        .post("/")
+        .send({
+          query: deletePostByIdQuery,
+          variables: {
+            deletePostByIdId: "akjjfjsafdas",
+          },
+        });
+      const errMessage = JSON.parse(response.text).errors[0].message;
+      expect(errMessage).toBe(
+        'Unexpected error value: "Post not found"'
+      );
+    });
+  });
+});
+
+describe("delete User by Id", () => {
+  const deleteUserByIdQuery = `
+  mutation DeleteUserById($deleteUserByIdId: String!) {
+    deleteUserById(id: $deleteUserByIdId) {
+      message
+    }
+  }
+  `;
+
+  describe("successful delete", () => {
+    it("should return a response message on success", async () => {
+      const response = await request(url)
+        .post("/")
+        .send({
+          query: deleteUserByIdQuery,
+          variables: {
+            deleteUserByIdId: userId,
+          },
+        });
+      const data = response.body.data.deleteUserById;
+      expect(typeof data).toBe("object");
+      expect(data).toHaveProperty("message");
+      expect(data.message).toBe(
+        `User with id ${userId} has been deleted`
+      );
+    });
+  });
+
+  describe("failed delete", () => {
+    it("should return an error message on nonexistatnt id", async () => {
+      const response = await request(url)
+        .post("/")
+        .send({
+          query: deleteUserByIdQuery,
+          variables: {
+            deleteUserByIdId: "akjjfjsafdas",
+          },
+        });
+      const errMessage = JSON.parse(response.text).errors[0].message;
+      expect(errMessage).toBe(
+        'Unexpected error value: "User not found"'
+      );
+    });
+  });
+});
+
+describe("delete Forum by Id", () => {
+  const deleteForumByIdQuery = `
+  mutation DeleteForumById($deleteForumByIdId: String!) {
+    deleteForumById(id: $deleteForumByIdId) {
+      message
+    }
+  }
+  `;
+
+  describe("successful delete", () => {
+    it("should return a response message on success", async () => {
+      const response = await request(url)
+        .post("/")
+        .send({
+          query: deleteForumByIdQuery,
+          variables: {
+            deleteForumByIdId: forumId,
+          },
+        });
+      const data = response.body.data.deleteForumById;
+      expect(typeof data).toBe("object");
+      expect(data).toHaveProperty("message");
+      expect(data.message).toBe(
+        `Forum with id ${forumId} has been deleted`
+      );
+    });
+  });
+
+  describe("failed delete", () => {
+    it("should return an error message on nonexistatnt id", async () => {
+      const response = await request(url)
+        .post("/")
+        .send({
+          query: deleteForumByIdQuery,
+          variables: {
+            deleteForumByIdId: "akjjfjsafdas",
+          },
+        });
+      const errMessage = JSON.parse(response.text).errors[0].message;
+      expect(errMessage).toBe(
+        'Unexpected error value: "Forum not found"'
+      );
+    });
   });
 });

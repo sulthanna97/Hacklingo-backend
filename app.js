@@ -16,6 +16,7 @@ const typeDefs = `#graphql
     nativeLanguage: String
     targetLanguage: [String]
     posts: [Post]
+    comments: [Comment]
   }
 
   type Comment {
@@ -27,13 +28,6 @@ const typeDefs = `#graphql
 
   type ResponseMessage {
     message: String
-  }
-
-  type Comment {
-    _id: String
-    userId: String
-    content: String
-    postId: String
   }
 
   type Post {
@@ -78,8 +72,9 @@ const typeDefs = `#graphql
   }
 
   type Query {
-    findAllUsers: [User]
+    findUsersByNativeLanguage(nativeLanguage: String): [User]
     findUserById(id: String): User
+    findAllForums: [Forum]
     findForumById(id: String): Forum
     findPostById(id: String): Post
     findCommentById(id: String): Comment
@@ -87,7 +82,7 @@ const typeDefs = `#graphql
 
   type Mutation {
     insertNewUser(input: SignUpInput!): User
-    updateUserById(input: SignUpInput!, id:String): User
+    updateUserById(input: SignUpInput!, id: String): User
     deleteUserById(id: String!): ResponseMessage
     insertNewPost(input: PostInput!): Post
     updatePostById(input: PostInput!, id: String): Post
@@ -95,28 +90,42 @@ const typeDefs = `#graphql
     insertForums(input: [ForumInput]!): ResponseMessage
     deleteForumById(id: String!): ResponseMessage
     insertNewComment(input: CommentInput!): Comment
+    updateCommentById(input: CommentInput!, id: String): Comment
     deleteCommentById(id: String!): ResponseMessage
   }
 `;
 
 const resolvers = {
   Query: {
-    findAllUsers: async () => {
+    findUsersByNativeLanguage: async (_, args) => {
       try {
-        const users = await User.find();
+        const users = await User.find({ nativeLanguage: args.nativeLanguage });
         return users;
       } catch (err) {
-        console.log(err);
         throw err;
       }
     },
 
     findUserById: async (_, args) => {
       try {
-        const user = await User.findById(args.id).populate("posts");
+        const user = await User.findById(args.id).populate([
+          "posts",
+          "comments",
+        ]);
+        if (!user) {
+          throw "User not found";
+        }
         return user;
       } catch (err) {
-        console.log(err);
+        throw err;
+      }
+    },
+
+    findAllForums: async () => {
+      try {
+        const forums = await Forum.find();
+        return forums;
+      } catch (err) {
         throw err;
       }
     },
@@ -124,9 +133,11 @@ const resolvers = {
     findForumById: async (_, args) => {
       try {
         const forum = await Forum.findById(args.id).populate("posts");
+        if (!forum) {
+          throw "Forum not found";
+        }
         return forum;
       } catch (err) {
-        console.log(err);
         throw err;
       }
     },
@@ -134,9 +145,11 @@ const resolvers = {
     findPostById: async (_, args) => {
       try {
         const post = await Post.findById(args.id).populate("comments");
+        if (!post) {
+          throw "Post not found";
+        }
         return post;
       } catch (err) {
-        console.log(err);
         throw err;
       }
     },
@@ -144,9 +157,11 @@ const resolvers = {
     findCommentById: async (_, args) => {
       try {
         const comment = await Comment.findById(args.id);
+        if (!comment) {
+          throw "Comment not found";
+        }
         return comment;
       } catch (err) {
-        console.log(err);
         throw err;
       }
     },
@@ -167,7 +182,7 @@ const resolvers = {
       try {
         const updatedUser = await User.findByIdAndUpdate(args.id, args.input, {
           returnDocument: "after",
-          runValidators: true
+          runValidators: true,
         });
         return updatedUser;
       } catch (err) {
@@ -179,9 +194,7 @@ const resolvers = {
       try {
         const deleted = await User.findByIdAndDelete(args.id);
         if (!deleted)
-          throw {
-            message: `User with id ${args.id} not found`,
-          };
+          throw `User not found`;
         return {
           message: `User with id ${args.id} has been deleted`,
         };
@@ -202,15 +215,15 @@ const resolvers = {
         await forum.save();
         return newPost;
       } catch (err) {
-        console.log(err);
         throw err;
       }
     },
 
     updatePostById: async (_, args) => {
       try {
-        const updatedPost = Post.findByIdAndUpdate(args.id, args.input, {
+        const updatedPost = await Post.findByIdAndUpdate(args.id, args.input, {
           returnDocument: "after",
+          runValidators: true,
         }).populate("comments");
         return updatedPost;
       } catch (err) {
@@ -222,9 +235,7 @@ const resolvers = {
       try {
         const deleted = await Post.findByIdAndDelete(args.id);
         if (!deleted)
-          throw {
-            message: `Post with id ${args.id} not found`,
-          };
+          throw "Post not found";
         return {
           message: `Post with id ${args.id} has been deleted`,
         };
@@ -255,9 +266,7 @@ const resolvers = {
       try {
         const deleted = await Forum.findByIdAndDelete(args.id);
         if (!deleted)
-          throw {
-            message: `Forum with id ${args.id} not found`,
-          };
+          throw "Forum not found";
         return {
           message: `Forum with id ${args.id} has been deleted`,
         };
@@ -272,7 +281,7 @@ const resolvers = {
         const user = await User.findById(args.input.userId);
         const post = await Post.findById(args.input.postId);
         await newComment.save();
-        user.posts.push(newComment._id);
+        user.comments.push(newComment._id);
         post.comments.push(newComment._id);
         await user.save();
         await post.save();
@@ -282,13 +291,27 @@ const resolvers = {
       }
     },
 
+    updateCommentById: async (_, args) => {
+      try {
+        const updatedComment = await Comment.findByIdAndUpdate(
+          args.id,
+          args.input,
+          {
+            returnDocument: "after",
+            runValidators: true,
+          }
+        );
+        return updatedComment;
+      } catch (err) {
+        throw err;
+      }
+    },
+
     deleteCommentById: async (_, args) => {
       try {
         const deleted = await Comment.findByIdAndDelete(args.id);
         if (!deleted)
-          throw {
-            message: `Comment with id ${args.id} not found`,
-          };
+          throw `Comment not found`;
         return {
           message: `Comment with id ${args.id} has been deleted`,
         };
@@ -308,7 +331,7 @@ const server = new ApolloServer({
 async function createApolloServer({ port }) {
   return startStandaloneServer(server, {
     listen: { port: port || 4000 },
-  })
+  });
 }
 
 module.exports = createApolloServer;
