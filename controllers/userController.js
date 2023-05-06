@@ -1,6 +1,7 @@
 import User from "../models/User.js";
 
 class UserController {
+
   static async findAllUsersByNativeLanguage(req, res, next) {
     try {
       const users = await User.find(
@@ -10,6 +11,7 @@ class UserController {
           updatedAt: 0,
           posts: 0,
           comments: 0,
+          profileImageUrl: 0,
           __v: 0,
           password: 0,
         }
@@ -37,7 +39,7 @@ class UserController {
 
   static async insertNewUser(req, res, next) {
     try {
-      const newUser = new User(req.body);
+      const newUser = new User({...req.body, profileImageUrl: req.imageUrl});
       await newUser.save();
       res.status(201).json(newUser);
     } catch (err) {
@@ -52,7 +54,7 @@ class UserController {
       }
       const updatedUser = await User.findByIdAndUpdate(
         req.params.id,
-        req.body,
+        {...req.body, profileImageUrl : req.imageUrl},
         {
           returnDocument: "after",
           runValidators: true,

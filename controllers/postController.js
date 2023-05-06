@@ -30,7 +30,7 @@ class PostController {
 
   static async insertNewPost(req, res, next) {
     try {
-      const newPost = new Post(req.body);
+      const newPost = new Post({...req.body, postImageUrl : req.imageUrl});
       const user = await User.findById(req.body.userId);
       const forum = await Forum.findById(req.body.forumId);
       await newPost.save();
@@ -51,7 +51,7 @@ class PostController {
       }
       const updatedPost = await Post.findByIdAndUpdate(
         req.params.id,
-        req.body,
+        {...req.body, postImageUrl: req.imageUrl},
         {
           returnDocument: "after",
           runValidators: true,

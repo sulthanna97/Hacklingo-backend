@@ -8,6 +8,14 @@ const forumSchema = new Schema(
       required: true,
       unique: true
     },
+    description: {
+      type: String,
+      required: true
+    },
+    flagImage : {
+      type: String,
+      required: true
+    },
     posts: [
       {
         type: Schema.Types.ObjectId,

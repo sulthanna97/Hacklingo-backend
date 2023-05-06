@@ -2,10 +2,24 @@ const mongoose = require("../config/connectToMongoDB.js");
 const { Schema } = mongoose;
 
 const imageSchema = new Schema(
-  
+  {
+    imageUrl: {
+      type: String,
+      required: true,
+    },
+    userId: {
+      type: String,
+    },
+    postId: {
+      type: String,
+    },
+    chatId: {
+      type: String,
+    },
+  },
   { timestamps: true }
 );
 
-const image = mongoose.model("image", imageSchema);
+const Image = mongoose.model("Image", imageSchema);
 
-module.exports = image;
+module.exports = Image;

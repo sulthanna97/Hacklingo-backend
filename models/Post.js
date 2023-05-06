@@ -21,6 +21,9 @@ const postSchema = new Schema(
       type: String,
       required: [true, "Content is required"], 
     },
+    postImageUrl: {
+      type: String
+    },
     forumId: {
       type: Schema.Types.ObjectId,
       required: [true, "Forum Id is required"],

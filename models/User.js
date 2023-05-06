@@ -48,6 +48,9 @@ const userSchema = new Schema(
         message: "Role must be either 'regular' or 'moderator'",
       },
     },
+    profileImageUrl: {
+      type: String,
+    },
     targetLanguage: [
       {
         type: String,
