@@ -1,16 +1,17 @@
 // we import a function that we wrote to create a new instance of Apollo Server
-const createApolloServer = require("../app.js");
+import createApolloServer from "../app.js";
+import fs from "fs";
 
 // we'll use supertest to test our server
-const request = require("supertest");
-const newUserTestData = require("./testData/userTestData.json");
-const newForumTestData = require("./testData/forumTestData.json");
-const newPostTestData = require("./testData/postTestData.json");
-const newCommentTestData = require("./testData/commentTestData.json");
-const User = require("../models/User.js");
-const Post = require("../models/Post");
-const Forum = require("../models/Forum.js");
-const Comment = require("../models/Comment.js");
+import request from "supertest";
+const newUserTestData = JSON.parse(fs.readFileSync("__test__/testData/userTestData.json", "utf-8"));
+const newForumTestData = JSON.parse(fs.readFileSync("__test__/testData/forumTestData.json", "utf-8"));
+const newPostTestData = JSON.parse(fs.readFileSync("__test__/testData/postTestData.json", "utf-8"));
+const newCommentTestData = JSON.parse(fs.readFileSync("__test__/testData/commentTestData.json", "utf-8"));
+import User from "../models/User.js";
+import Post from "../models/Post";
+import Forum from "../models/Forum.js";
+import Comment from "../models/Comment.js";
 
 let server, url;
 let userId = "";

@@ -1,11 +1,14 @@
-const { ApolloServer } = require("@apollo/server");
-const { startStandaloneServer } = require("@apollo/server/standalone");
-const User = require("./models/User.js");
-const Post = require("./models/Post.js");
-const Forum = require("./models/Forum.js");
-const Comment = require("./models/Comment.js");
+import { ApolloServer } from "@apollo/server";
+import { startStandaloneServer } from "@apollo/server/standalone";
+import GraphQLUpload from "graphql-upload/GraphQLUpload.mjs";
+import User from "./models/User.js";
+import Post from "./models/Post.js";
+import Forum from "./models/Forum.js";
+import Comment from "./models/Comment.js";
 
 const typeDefs = `#graphql
+
+  scalar Upload
 
   type User {
     _id: String
@@ -45,6 +48,11 @@ const typeDefs = `#graphql
     posts: [Post]
   }
 
+  type File {
+    filename: String
+    mimetype: String
+  }
+
   input SignUpInput {
     username: String
     email: String
@@ -81,6 +89,7 @@ const typeDefs = `#graphql
   }
 
   type Mutation {
+    uploadImage(file: Upload!): File
     insertNewUser(input: SignUpInput!): User
     updateUserById(input: SignUpInput!, id: String): User
     deleteUserById(id: String!): ResponseMessage
@@ -96,6 +105,9 @@ const typeDefs = `#graphql
 `;
 
 const resolvers = {
+
+  Upload: GraphQLUpload,
+
   Query: {
     findUsersByNativeLanguage: async (_, args) => {
       try {
@@ -168,6 +180,21 @@ const resolvers = {
   },
 
   Mutation: {
+
+    uploadImage: async (_, args) => {
+      const { filename, mimetype, createReadStream } = await args.file;
+      console.log(filename, "<<< ini filename");
+      const stream = createReadStream();
+      // Save the file to your desired location or storage service (e.g., AWS S3, Google Cloud Storage)
+      // Use the `stream` to read the file and save it
+      // Return metadata about the saved file
+      return {
+        filename,
+        mimetype,
+        // ... other properties
+      };
+    },
+
     insertNewUser: async (_, args) => {
       try {
         const newUser = new User(args.input);
@@ -193,8 +220,7 @@ const resolvers = {
     deleteUserById: async (_, args) => {
       try {
         const deleted = await User.findByIdAndDelete(args.id);
-        if (!deleted)
-          throw `User not found`;
+        if (!deleted) throw `User not found`;
         return {
           message: `User with id ${args.id} has been deleted`,
         };
@@ -234,8 +260,7 @@ const resolvers = {
     deletePostById: async (_, args) => {
       try {
         const deleted = await Post.findByIdAndDelete(args.id);
-        if (!deleted)
-          throw "Post not found";
+        if (!deleted) throw "Post not found";
         return {
           message: `Post with id ${args.id} has been deleted`,
         };
@@ -265,8 +290,7 @@ const resolvers = {
     deleteForumById: async (_, args) => {
       try {
         const deleted = await Forum.findByIdAndDelete(args.id);
-        if (!deleted)
-          throw "Forum not found";
+        if (!deleted) throw "Forum not found";
         return {
           message: `Forum with id ${args.id} has been deleted`,
         };
@@ -310,8 +334,7 @@ const resolvers = {
     deleteCommentById: async (_, args) => {
       try {
         const deleted = await Comment.findByIdAndDelete(args.id);
-        if (!deleted)
-          throw `Comment not found`;
+        if (!deleted) throw `Comment not found`;
         return {
           message: `Comment with id ${args.id} has been deleted`,
         };
@@ -326,6 +349,9 @@ const server = new ApolloServer({
   typeDefs,
 
   resolvers,
+
+  uploads: false, // Disable the built-in uploads handling
+  csrfPrevention: false
 });
 
 async function createApolloServer({ port }) {
@@ -334,4 +360,4 @@ async function createApolloServer({ port }) {
   });
 }
 
-module.exports = createApolloServer;
+export default createApolloServer;

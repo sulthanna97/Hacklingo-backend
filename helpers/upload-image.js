@@ -1,5 +1,5 @@
-const util = require("util");
-const gc = require("../config/connectToGoogleCloudStorage");
+import util from "util";
+import gc from "../config/connectToGoogleCloudStorage.js";
 const bucket = gc.bucket("hacklingo_images"); // should be your bucket name
 
 /**
@@ -30,4 +30,4 @@ const uploadImage = (file) =>
       .end(buffer);
   });
 
-module.exports = uploadImage;
+export default uploadImage;
