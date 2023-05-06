@@ -3,10 +3,10 @@ const createApolloServer = require("../app.js");
 
 // we'll use supertest to test our server
 const request = require("supertest");
-const newUserTestData = require("./userTestData.json");
-const newForumTestData = require("./forumTestData.json");
-const newPostTestData = require("./postTestData.json");
-const newCommentTestData = require("./commentTestData.json");
+const newUserTestData = require("./testData/userTestData.json");
+const newForumTestData = require("./testData/forumTestData.json");
+const newPostTestData = require("./testData/postTestData.json");
+const newCommentTestData = require("./testData/commentTestData.json");
 const User = require("../models/User.js");
 const Post = require("../models/Post");
 const Forum = require("../models/Forum.js");
