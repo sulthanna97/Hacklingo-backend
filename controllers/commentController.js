@@ -44,9 +44,6 @@ class CommentController {
           runValidators: true,
         }
       );
-      if (!updatedComment) {
-        throw { name: "NotFound" };
-      }
       res.status(200).json(updatedComment);
     } catch (err) {
       next(err);
@@ -56,9 +53,6 @@ class CommentController {
   static async deleteCommentById(req, res, next) {
     try {
       const deleted = await Comment.findByIdAndDelete(req.params.id);
-      if (!deleted) {
-        throw { name: "NotFound" };
-      }
       res.status(200).json({
         message: `Comment with id ${req.params.id} has been deleted`,
       });

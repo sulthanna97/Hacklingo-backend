@@ -52,9 +52,6 @@ class UserController {
 
   static async updateUserById(req, res, next) {
     try {
-      if (req.params.id.length !== 24) {
-        throw { name: "NotFound" };
-      }
       const updatedUser = await User.findByIdAndUpdate(
         req.params.id,
         {...req.body, userId: req.userId, profileImageUrl : req.imageUrl},
@@ -71,9 +68,6 @@ class UserController {
           },
         }
       );
-      if (!updatedUser) {
-        throw { name: "NotFound" };
-      }
       res.status(200).json(updatedUser);
     } catch (err) {
       next(err);
@@ -82,13 +76,10 @@ class UserController {
 
   static async deleteUserById(req, res, next) {
     try {
-      if (req.params.id.length !== 24) {
-        throw { name: "NotFound" };
-      }
+      // if (req.params.id.length !== 24) {
+      //   throw { name: "NotFound" };
+      // }
       const deleted = await User.findByIdAndDelete(req.params.id);
-      if (!deleted) {
-        throw { name: "NotFound" };
-      }
       res.status(200).json({
         message: `User with id ${req.params.id} has been deleted`,
       });

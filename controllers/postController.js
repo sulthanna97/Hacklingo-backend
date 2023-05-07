@@ -5,7 +5,6 @@ import User from "../models/User.js";
 class PostController {
   static async findPostsBySearch(req, res, next) {
     try {
-      console.log(req.query.search, "<<< inis search");
       const regex = new RegExp(req.query.search, "i");
       const posts = await Post.find({ title: regex });
       res.status(200).json(posts);
@@ -67,13 +66,7 @@ class PostController {
 
   static async deletePostById(req, res, next) {
     try {
-      if (req.params.id.length !== 24) {
-        throw { name: "NotFound" };
-      }
       const deleted = await Post.findByIdAndDelete(req.params.id);
-      if (!deleted) {
-        throw { name: "NotFound" };
-      }
       res.status(200).json({
         message: `Post with id ${req.params.id} has been deleted`,
       });

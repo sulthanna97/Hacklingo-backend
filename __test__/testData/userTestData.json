@@ -11,10 +11,10 @@
   },
   {
     "input": {
-      "username": "test",
-      "email": "test@mail.com",
+      "username": "testImage",
+      "email": "testImage@mail.com",
       "password": "Test123",
-      "nativeLanguage": "Indonesian/Bahasa Indonesia",
+      "nativeLanguage": "German/Deutsch",
       "targetLanguage": ["Indonesian/Bahasa Indonesia", "English"],
       "role": "regular"
     }
@@ -134,6 +134,26 @@
       "password": "Test123",
       "nativeLanguage": "Indonesian/Bahasa Indonesia",
       "targetLanguage": [""],
+      "role": "regular"
+    }
+  },
+  {
+    "input": {
+      "username": "testImage2",
+      "email": "testImage2@mail.com",
+      "password": "Test123",
+      "nativeLanguage": "German/Deutsch",
+      "targetLanguage": ["Indonesian/Bahasa Indonesia", "English"],
+      "role": "regular"
+    }
+  },
+  {
+    "input": {
+      "username": "testImage2",
+      "email": "@testIma@ge2.mail.com",
+      "password": "Test123",
+      "nativeLanguage": "German/Deutsch",
+      "targetLanguage": ["Indonesian/Bahasa Indonesia", "English"],
       "role": "regular"
     }
   }

@@ -1,6 +1,11 @@
 // we import a function that we wrote to create a new instance of Apollo Server
 import fs from "fs";
 import app from "../app.js";
+import { fileURLToPath } from "url";
+import { dirname } from "path";
+import path from "path";
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 // we'll use supertest to test our server
 import request from "supertest";
@@ -98,10 +103,18 @@ describe("insert new User", () => {
       expect(newUser.role).toBe("regular");
     });
 
-    it("should return a new user after success with image", async () => {
+    it.only("should return a new user after success with image", async () => {
+      const filePath = path.join(__dirname, "testImages/Borobudur_Temple.jpg");
       const { body, status } = await request(app)
         .post("/users/register")
-        .send(newUserTestData[1].input);
+        .field("username", newUserTestData[1].input.username)
+        .field("email", newUserTestData[1].input.email)
+        .field("password", newUserTestData[1].input.password)
+        .field("nativeLanguage", newUserTestData[1].input.nativeLanguage)
+        .field("targetLanguage", newUserTestData[1].input.targetLanguage)
+        .field("role", newUserTestData[1].input.role)
+        .set("Content-Type", "multipart/form-data")
+        .attach("file", filePath, "Borobudur_Temple.jpg");
       const newUser = body;
       expect(status).toBe(201);
       expect(newUser).toHaveProperty("_id");
@@ -109,7 +122,9 @@ describe("insert new User", () => {
       expect(newUser).toHaveProperty("email");
       expect(newUser).toHaveProperty("profileImageUrl");
       expect(newUser).toHaveProperty("role");
-      expect(newUser).toHaveProperty("profileImageUrl");
+      expect(newUser.profileImageUrl).toBe(
+        "https://storage.cloud.google.com/hacklingo_images/Borobudur_Temple.jpg"
+      );
       expect(newUser.role).toBe("regular");
     });
   });
@@ -246,6 +261,52 @@ describe("insert new User", () => {
         "Target language is not in any of the options"
       );
     });
+
+    it.only("should return error when the upload is not an image", async () => {
+      const filePath = path.join(__dirname, "testImages/test.txt");
+      const { body, status } = await request(app)
+        .post("/users/register")
+        .field("username", newUserTestData[14].input.username)
+        .field("email", newUserTestData[14].input.email)
+        .field("password", newUserTestData[14].input.password)
+        .field("nativeLanguage", newUserTestData[14].input.nativeLanguage)
+        .field("targetLanguage", newUserTestData[14].input.targetLanguage)
+        .field("role", newUserTestData[14].input.role)
+        .set("Content-Type", "multipart/form-data")
+        .attach("file", filePath, "test.txt");
+      const newUser = body;
+      expect(status).toBe(400);
+      expect(newUser).toHaveProperty("message");
+      expect(newUser.message).toBe("You have invalid image");
+    });
+
+    it.only("should return error when the image size is too large", async () => {
+      const filePath = path.join(__dirname, "testImages/test_too_large.jpg");
+      const { body, status } = await request(app)
+        .post("/users/register")
+        .field("username", newUserTestData[14].input.username)
+        .field("email", newUserTestData[14].input.email)
+        .field("password", newUserTestData[14].input.password)
+        .field("nativeLanguage", newUserTestData[14].input.nativeLanguage)
+        .field("targetLanguage", newUserTestData[14].input.targetLanguage)
+        .field("role", newUserTestData[14].input.role)
+        .set("Content-Type", "multipart/form-data")
+        .attach("file", filePath, "test_too_large.jpg");
+      const newUser = body;
+      expect(status).toBe(400);
+      expect(newUser).toHaveProperty("message");
+      expect(newUser.message).toBe("File too large");
+    });
+
+    it.only("should return error with invalid email format", async () => {
+      const { body, status } = await request(app)
+        .post("/users/register")
+        .send(newUserTestData[15].input);
+      const newUser = body;
+      expect(status).toBe(400);
+      expect(newUser).toHaveProperty("message");
+      expect(newUser.message).toBe("Email must be in email format");
+    });
   });
 });
 
@@ -255,7 +316,7 @@ describe("insert new Article", () => {
       const { body, status } = await request(app)
         .post("/articles")
         .set("userid", userId)
-        .send({ ...newArticlesTestData[0]});
+        .send({ ...newArticlesTestData[0] });
       const newArticle = body;
       articleId = newArticle._id;
       expect(status).toBe(201);
@@ -270,8 +331,8 @@ describe("insert new Article", () => {
   describe("failed inserts", () => {
     it.only("should return an error with input without userId", async () => {
       const { body, status } = await request(app)
-      .post("/articles")
-      .send({ ...newArticlesTestData[1]});
+        .post("/articles")
+        .send({ ...newArticlesTestData[1] });
       const newArticle = body;
       expect(status).toBe(401);
       expect(newArticle).toHaveProperty("message");
@@ -322,19 +383,20 @@ describe("insert new Post", () => {
       expect(newPost.title).toBe("null");
     });
 
-    it("should return a new post after success with image", async () => {
+    it.only("should return a new post after success with image", async () => {
+      const filePath = path.join(__dirname, "testImages/Borobudur_Temple.jpg");
       const { body, status } = await request(app)
         .post("/posts")
+        .field("title", newPostTestData[1].input.title)
+        .field("content", newPostTestData[1].input.content)
+        .field("forumId", forumId)
+        .set("Content-Type", "multipart/form-data")
         .set("userid", userId)
-        .send({ ...newPostTestData[1].input, forumId });
+        .attach("file", filePath, "Borobudur_Temple.jpg");
       const newPost = body;
       expect(status).toBe(201);
-      expect(newPost).toHaveProperty("_id");
-      expect(newPost).toHaveProperty("title");
-      expect(newPost).toHaveProperty("content");
-      expect(newPost).toHaveProperty("userId");
-      expect(newPost).toHaveProperty("forumId");
-      expect(newPost.title).toBe("null");
+      expect(newPost).toHaveProperty("postImageUrl");
+      expect(newPost.postImageUrl).toBe("https://storage.cloud.google.com/hacklingo_images/Borobudur_Temple.jpg");
     });
   });
 
@@ -464,60 +526,47 @@ describe("update User by Id", () => {
 
   describe("successful update", () => {
     it.only("should return the updated user after success", async () => {
-      const updateInput = {
-        ...newUserTestData[0].input,
-        username: "test edit",
-        password: "Test123Edit",
-        nativeLanguage: "Indonesian/Bahasa Indonesia",
-        targetLanguage: ["German/Deutsch", "English"],
-      };
+      const filePath = path.join(__dirname, "testImages/Stupa_Borobudur.jpg");
       const { body, status } = await request(app)
         .put(`/users/${userId}`)
+        .field("username", "test edit")
+        .field("nativeLanguage", "German/Deutsch")
+        .field("targetLanguage", ["English", "German/Deutsch"])
+        .set("Content-Type", "multipart/form-data")
         .set("userid", userId)
-        .send(updateInput);
+        .attach("file", filePath, "Stupa_Borobudur.jpg");
       const updatedUser = body;
       expect(status).toBe(200);
       expect(updatedUser).toHaveProperty("_id");
-      expect(updatedUser).toHaveProperty("email");
-      expect(updatedUser).toHaveProperty("role");
       expect(updatedUser).toHaveProperty("username");
-      expect(updatedUser).toHaveProperty("nativeLanguage");
-      expect(updatedUser).toHaveProperty("targetLanguage");
-      expect(updatedUser.username).toBe("test edit");
-      expect(updatedUser.nativeLanguage).toBe("Indonesian/Bahasa Indonesia");
-      expect(updatedUser.targetLanguage).toHaveLength(2);
-      expect(updatedUser.targetLanguage).toContain("German/Deutsch");
-    });
-
-    it("should return the updated user after success with image", async () => {
-      const updateInput = {
-        ...newUserTestData[0].input,
-        username: "test edit",
-        password: "Test123Edit",
-        nativeLanguage: "Indonesian/Bahasa Indonesia",
-        targetLanguage: ["German/Deutsch", "English"],
-      };
-      const { body, status } = await request(app)
-        .put(`/users/${userId}`)
-        .set("userid", userId)
-        .send(updateInput);
-      const updatedUser = body;
-      expect(status).toBe(200);
-      expect(updatedUser).toHaveProperty("_id");
-      expect(updatedUser).toHaveProperty("email");
-      expect(updatedUser).toHaveProperty("role");
-      expect(updatedUser).toHaveProperty("username");
-      expect(updatedUser).toHaveProperty("nativeLanguage");
-      expect(updatedUser).toHaveProperty("targetLanguage");
       expect(updatedUser).toHaveProperty("profileImageUrl");
+      expect(updatedUser).toHaveProperty("email");
       expect(updatedUser.username).toBe("test edit");
-      expect(updatedUser.nativeLanguage).toBe("Indonesian/Bahasa Indonesia");
-      expect(updatedUser.targetLanguage).toHaveLength(2);
-      expect(updatedUser.targetLanguage).toContain("German/Deutsch");
+      expect(updatedUser.profileImageUrl).toBe(
+        "https://storage.cloud.google.com/hacklingo_images/Stupa_Borobudur.jpg"
+      );
     });
   });
 
   describe("failed updates", () => {
+    it.only("should return error with input with malformed userId params", async () => {
+      const updateInput = {
+        ...newUserTestData[0].input,
+        username: "",
+        password: "Test123Edit",
+        nativeLanguage: "Indonesian/Bahasa Indonesia",
+        targetLanguage: ["German/Deutsch", "English"],
+      };
+      const { body, status } = await request(app)
+        .put(`/users/123456789012345678901234`)
+        .set("userid", userId)
+        .send(updateInput);
+      const updatedUser = body;
+      expect(status).toBe(404);
+      expect(updatedUser).toHaveProperty("message");
+      expect(updatedUser.message).toBe("Data not found");
+    });
+
     it.only("should return error with input without username", async () => {
       const updateInput = {
         ...newUserTestData[0].input,
@@ -737,7 +786,7 @@ describe("find Users based on their native language", () => {
         .set("userid", userId);
       const users = body;
       expect(status).toBe(200);
-      expect(users).toHaveLength(2);
+      expect(users).toHaveLength(1);
       expect(users[0]).toHaveProperty("_id");
       expect(users[0]).toHaveProperty("username");
       expect(users[0]).toHaveProperty("email");
@@ -774,7 +823,7 @@ describe("find User based on their id", () => {
       expect(user).toHaveProperty("email");
       expect(user).toHaveProperty("comments");
       expect(user).toHaveProperty("posts");
-      expect(user.posts).toHaveLength(1);
+      expect(user.posts).toHaveLength(2);
       expect(user.posts[0]).toHaveProperty("content");
       expect(user.comments).toHaveLength(1);
       expect(user.comments[0]).toHaveProperty("content");
@@ -785,6 +834,16 @@ describe("find User based on their id", () => {
     it.only("should return array of users after success", async () => {
       const { body, status } = await request(app)
         .get(`/users/kuashfkahfhsf`)
+        .set("userid", userId);
+      const user = body;
+      expect(status).toBe(404);
+      expect(user).toHaveProperty("message");
+      expect(user.message).toBe("Data not found");
+    });
+
+    it.only("should return array of users after success", async () => {
+      const { body, status } = await request(app)
+        .get(`/users/123456789012345678901234`)
         .set("userid", userId);
       const user = body;
       expect(status).toBe(404);
@@ -824,6 +883,16 @@ describe("find Post based on their id", () => {
       expect(post).toHaveProperty("message");
       expect(post.message).toBe("Data not found");
     });
+
+    it.only("should return error with wrong id", async () => {
+      const { body, status } = await request(app)
+        .get(`/posts/123456789012345678901234`)
+        .set("userid", userId);
+      const post = body;
+      expect(status).toBe(404);
+      expect(post).toHaveProperty("message");
+      expect(post.message).toBe("Data not found");
+    });
   });
 });
 
@@ -833,12 +902,11 @@ describe("find Post based on title", () => {
       const search = "nu";
       const { body, status } = await request(app)
         .get(`/posts`)
-        .query({search})
+        .query({ search })
         .set("userid", userId);
       const posts = body;
-      console.log(posts);
       expect(status).toBe(200);
-      expect(posts).toHaveLength(1);
+      expect(posts).toHaveLength(2);
       expect(posts[0].title).toMatch(/nu/);
     });
   });
@@ -848,7 +916,7 @@ describe("find Post based on title", () => {
       const search = "hfhsfhsahflsfl";
       const { body, status } = await request(app)
         .get(`/posts`)
-        .query({search})
+        .query({ search })
         .set("userid", userId);
       const articles = body;
       expect(status).toBe(200);
@@ -875,9 +943,19 @@ describe("find Comment based on their id", () => {
   });
 
   describe("fetch with nonexistant id", () => {
-    it.only("should return array of users after success", async () => {
+    it.only("should return error with malformed id", async () => {
       const { body, status } = await request(app)
         .get(`/comments/14812904809248dvsd`)
+        .set("userid", userId);
+      const comment = body;
+      expect(status).toBe(404);
+      expect(comment).toHaveProperty("message");
+      expect(comment.message).toBe("Data not found");
+    });
+
+    it.only("should return error with nonexistant id", async () => {
+      const { body, status } = await request(app)
+        .get(`/comments/123456789012345678901234`)
         .set("userid", userId);
       const comment = body;
       expect(status).toBe(404);
@@ -914,6 +992,16 @@ describe("find Article based on their id", () => {
       expect(post).toHaveProperty("message");
       expect(post.message).toBe("Data not found");
     });
+
+    it.only("should return error with wrong id", async () => {
+      const { body, status } = await request(app)
+        .get(`/articles/123456789012345678901234`)
+        .set("userid", userId);
+      const post = body;
+      expect(status).toBe(404);
+      expect(post).toHaveProperty("message");
+      expect(post.message).toBe("Data not found");
+    });
   });
 });
 
@@ -923,7 +1011,7 @@ describe("find Article based on title", () => {
       const search = "English";
       const { body, status } = await request(app)
         .get(`/articles`)
-        .query({search})
+        .query({ search })
         .set("userid", userId);
       const articles = body;
       expect(status).toBe(200);
@@ -937,7 +1025,7 @@ describe("find Article based on title", () => {
       const search = "hfhsfhsahflsfl";
       const { body, status } = await request(app)
         .get(`/articles`)
-        .query({search})
+        .query({ search })
         .set("userid", userId);
       const articles = body;
       expect(status).toBe(200);
@@ -974,7 +1062,7 @@ describe("find Forum By Id", () => {
       expect(forum).toHaveProperty("_id");
       expect(forum).toHaveProperty("name");
       expect(forum).toHaveProperty("posts");
-      expect(forum.posts).toHaveLength(1);
+      expect(forum.posts).toHaveLength(2);
       expect(forum.posts[0]).toHaveProperty("_id");
       expect(forum.posts[0]).toHaveProperty("content");
     });
@@ -984,6 +1072,16 @@ describe("find Forum By Id", () => {
     it.only("should return error with nonexistatnt id", async () => {
       const { body, status } = await request(app)
         .get(`/forums/kljflsjfjsfjsdfl`)
+        .set("userid", userId);
+      const forum = body;
+      expect(status).toBe(404);
+      expect(forum).toHaveProperty("message");
+      expect(forum.message).toBe("Data not found");
+    });
+
+    it.only("should return error with nonexistatnt id", async () => {
+      const { body, status } = await request(app)
+        .get(`/forums/123456789012345678901234`)
         .set("userid", userId);
       const forum = body;
       expect(status).toBe(404);
@@ -1013,6 +1111,16 @@ describe("delete Comment by Id", () => {
     it.only("should return an error message on nonexistatnt id", async () => {
       const { body, status } = await request(app)
         .delete(`/comments/lkjfskjfsjfjsa`)
+        .set("userid", userId);
+      const deletedComment = body;
+      expect(status).toBe(404);
+      expect(deletedComment).toHaveProperty("message");
+      expect(deletedComment.message).toBe("Data not found");
+    });
+
+    it.only("should return an error message on malformed id", async () => {
+      const { body, status } = await request(app)
+        .delete(`/comments/123456789012345678901234`)
         .set("userid", userId);
       const deletedComment = body;
       expect(status).toBe(404);
@@ -1100,6 +1208,17 @@ describe("delete Forum by Id", () => {
     it.only("should return an error message on nonexistatnt id", async () => {
       const { body, status } = await request(app)
         .delete(`/forums/asmlkasfkaSKAD`)
+        .set("userid", dummyUserId);
+      const deletedForum = body;
+      expect(status).toBe(404);
+      expect(typeof deletedForum).toBe("object");
+      expect(deletedForum).toHaveProperty("message");
+      expect(deletedForum.message).toBe("Data not found");
+    });
+
+    it.only("should return an error message on nonexistatnt id", async () => {
+      const { body, status } = await request(app)
+        .delete(`/forums/123456789012345678901234`)
         .set("userid", dummyUserId);
       const deletedForum = body;
       expect(status).toBe(404);
