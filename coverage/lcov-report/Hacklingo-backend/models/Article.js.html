@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for Hacklingo-backend/models/Forum.js</title>
+    <title>Code coverage report for Hacklingo-backend/models/Article.js</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../../prettify.css" />
     <link rel="stylesheet" href="../../base.css" />
@@ -19,7 +19,7 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../../index.html">All files</a> / <a href="index.html">Hacklingo-backend/models</a> Forum.js</h1>
+        <h1><a href="../../index.html">All files</a> / <a href="index.html">Hacklingo-backend/models</a> Article.js</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
@@ -87,24 +87,10 @@
 <a name='L22'></a><a href='#L22'>22</a>
 <a name='L23'></a><a href='#L23'>23</a>
 <a name='L24'></a><a href='#L24'>24</a>
-<a name='L25'></a><a href='#L25'>25</a>
-<a name='L26'></a><a href='#L26'>26</a>
-<a name='L27'></a><a href='#L27'>27</a>
-<a name='L28'></a><a href='#L28'>28</a>
-<a name='L29'></a><a href='#L29'>29</a>
-<a name='L30'></a><a href='#L30'>30</a>
-<a name='L31'></a><a href='#L31'>31</a>
-<a name='L32'></a><a href='#L32'>32</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L25'></a><a href='#L25'>25</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -128,34 +114,27 @@
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import mongoose from "../config/connectToMongoDB.js";
 const { Schema } = mongoose;
 &nbsp;
-const forumSchema = new Schema(
+const articleSchema = new Schema(
   {
-    name: {
+    userId: {
       type: String,
-      required: true,
-      unique: true
+      required: [true, "User Id is required"]
     },
-    description: {
+    content: {
       type: String,
-      required: true
+      required: [true, "Content is required"]
     },
-    flagImage : {
+    title: {
       type: String,
-      required: true
-    },
-    posts: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: "Post"
-      }
-    ]
+      required: [true, "Title is required"]
+    }
   },
   { timestamps: true }
 );
 &nbsp;
-const Forum = mongoose.model("Forum", forumSchema);
+const Article = mongoose.model("Article", articleSchema);
 &nbsp;
-export default Forum;
+export default Article;
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->

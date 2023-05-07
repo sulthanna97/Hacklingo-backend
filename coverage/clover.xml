@@ -1,38 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1683448321881" clover="3.2.0">
-  <project timestamp="1683448321881" name="All files">
-    <metrics statements="263" coveredstatements="212" conditionals="82" coveredconditionals="56" methods="36" coveredmethods="28" elements="381" coveredelements="296" complexity="0" loc="263" ncloc="263" packages="6" files="17" classes="17"/>
+<coverage generated="1683451345665" clover="3.2.0">
+  <project timestamp="1683451345665" name="All files">
+    <metrics statements="291" coveredstatements="242" conditionals="86" coveredconditionals="59" methods="39" coveredmethods="32" elements="416" coveredelements="333" complexity="0" loc="291" ncloc="291" packages="6" files="19" classes="19"/>
     <package name="Hacklingo-backend">
-      <metrics statements="27" coveredstatements="26" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
+      <metrics statements="30" coveredstatements="29" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
       <file name="app.js" path="C:\Users\affanabdillah\IdeaProjects\Project Hacktiv8\phase3\week3\Hacklingo-backend\app.js">
-        <metrics statements="27" coveredstatements="26" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
-        <line num="17" count="1" type="stmt"/>
-        <line num="19" count="1" type="stmt"/>
-        <line num="27" count="1" type="stmt"/>
+        <metrics statements="30" coveredstatements="29" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
+        <line num="18" count="1" type="stmt"/>
+        <line num="20" count="1" type="stmt"/>
         <line num="28" count="1" type="stmt"/>
         <line num="29" count="1" type="stmt"/>
         <line num="30" count="1" type="stmt"/>
-        <line num="33" count="1" type="stmt"/>
-        <line num="34" count="0" type="stmt"/>
-        <line num="37" count="1" type="stmt"/>
-        <line num="42" count="1" type="stmt"/>
+        <line num="31" count="1" type="stmt"/>
+        <line num="34" count="1" type="stmt"/>
+        <line num="35" count="0" type="stmt"/>
+        <line num="38" count="1" type="stmt"/>
         <line num="43" count="1" type="stmt"/>
         <line num="44" count="1" type="stmt"/>
-        <line num="51" count="1" type="stmt"/>
-        <line num="57" count="1" type="stmt"/>
+        <line num="45" count="1" type="stmt"/>
+        <line num="52" count="1" type="stmt"/>
         <line num="58" count="1" type="stmt"/>
         <line num="59" count="1" type="stmt"/>
-        <line num="65" count="1" type="stmt"/>
-        <line num="72" count="1" type="stmt"/>
-        <line num="78" count="1" type="stmt"/>
+        <line num="60" count="1" type="stmt"/>
+        <line num="66" count="1" type="stmt"/>
+        <line num="73" count="1" type="stmt"/>
         <line num="79" count="1" type="stmt"/>
         <line num="80" count="1" type="stmt"/>
         <line num="81" count="1" type="stmt"/>
         <line num="82" count="1" type="stmt"/>
         <line num="83" count="1" type="stmt"/>
         <line num="84" count="1" type="stmt"/>
-        <line num="90" count="1" type="stmt"/>
+        <line num="85" count="1" type="stmt"/>
+        <line num="91" count="1" type="stmt"/>
         <line num="97" count="1" type="stmt"/>
+        <line num="98" count="1" type="stmt"/>
+        <line num="99" count="1" type="stmt"/>
+        <line num="101" count="1" type="stmt"/>
       </file>
     </package>
     <package name="Hacklingo-backend.config">
@@ -53,7 +56,31 @@
       </file>
     </package>
     <package name="Hacklingo-backend.controllers">
-      <metrics statements="125" coveredstatements="102" conditionals="36" coveredconditionals="23" methods="19" coveredmethods="18"/>
+      <metrics statements="147" coveredstatements="126" conditionals="40" coveredconditionals="26" methods="22" coveredmethods="22"/>
+      <file name="articleController.js" path="C:\Users\affanabdillah\IdeaProjects\Project Hacktiv8\phase3\week3\Hacklingo-backend\controllers\articleController.js">
+        <metrics statements="21" coveredstatements="19" conditionals="4" coveredconditionals="3" methods="3" coveredmethods="3"/>
+        <line num="6" count="2" type="stmt"/>
+        <line num="7" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="8" count="1" type="stmt"/>
+        <line num="10" count="1" type="stmt"/>
+        <line num="11" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="12" count="0" type="stmt"/>
+        <line num="14" count="1" type="stmt"/>
+        <line num="16" count="1" type="stmt"/>
+        <line num="21" count="2" type="stmt"/>
+        <line num="22" count="2" type="stmt"/>
+        <line num="23" count="2" type="stmt"/>
+        <line num="24" count="2" type="stmt"/>
+        <line num="26" count="0" type="stmt"/>
+        <line num="31" count="3" type="stmt"/>
+        <line num="32" count="3" type="stmt"/>
+        <line num="33" count="3" type="stmt"/>
+        <line num="34" count="3" type="stmt"/>
+        <line num="35" count="1" type="stmt"/>
+        <line num="36" count="1" type="stmt"/>
+        <line num="37" count="1" type="stmt"/>
+        <line num="39" count="2" type="stmt"/>
+      </file>
       <file name="commentController.js" path="C:\Users\affanabdillah\IdeaProjects\Project Hacktiv8\phase3\week3\Hacklingo-backend\controllers\commentController.js">
         <metrics statements="31" coveredstatements="27" conditionals="8" coveredconditionals="5" methods="4" coveredmethods="4"/>
         <line num="7" count="2" type="stmt"/>
@@ -117,43 +144,44 @@
         <line num="66" count="1" type="stmt"/>
       </file>
       <file name="postController.js" path="C:\Users\affanabdillah\IdeaProjects\Project Hacktiv8\phase3\week3\Hacklingo-backend\controllers\postController.js">
-        <metrics statements="36" coveredstatements="27" conditionals="8" coveredconditionals="5" methods="5" coveredmethods="4"/>
-        <line num="7" count="0" type="stmt"/>
-        <line num="8" count="0" type="stmt"/>
-        <line num="9" count="0" type="stmt"/>
-        <line num="10" count="0" type="stmt"/>
-        <line num="12" count="0" type="stmt"/>
-        <line num="17" count="2" type="stmt"/>
-        <line num="18" count="2" type="cond" truecount="2" falsecount="0"/>
-        <line num="19" count="1" type="stmt"/>
-        <line num="21" count="1" type="stmt"/>
-        <line num="22" count="1" type="cond" truecount="1" falsecount="1"/>
-        <line num="23" count="0" type="stmt"/>
-        <line num="25" count="1" type="stmt"/>
-        <line num="27" count="1" type="stmt"/>
-        <line num="32" count="5" type="stmt"/>
+        <metrics statements="37" coveredstatements="32" conditionals="8" coveredconditionals="5" methods="5" coveredmethods="5"/>
+        <line num="7" count="2" type="stmt"/>
+        <line num="8" count="2" type="stmt"/>
+        <line num="9" count="2" type="stmt"/>
+        <line num="10" count="2" type="stmt"/>
+        <line num="11" count="2" type="stmt"/>
+        <line num="13" count="0" type="stmt"/>
+        <line num="18" count="2" type="stmt"/>
+        <line num="19" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="20" count="1" type="stmt"/>
+        <line num="22" count="1" type="stmt"/>
+        <line num="23" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="24" count="0" type="stmt"/>
+        <line num="26" count="1" type="stmt"/>
+        <line num="28" count="1" type="stmt"/>
         <line num="33" count="5" type="stmt"/>
-        <line num="38" count="5" type="stmt"/>
+        <line num="34" count="5" type="stmt"/>
         <line num="39" count="5" type="stmt"/>
         <line num="40" count="5" type="stmt"/>
-        <line num="41" count="1" type="stmt"/>
+        <line num="41" count="5" type="stmt"/>
         <line num="42" count="1" type="stmt"/>
         <line num="43" count="1" type="stmt"/>
         <line num="44" count="1" type="stmt"/>
         <line num="45" count="1" type="stmt"/>
-        <line num="47" count="4" type="stmt"/>
-        <line num="52" count="2" type="stmt"/>
+        <line num="46" count="1" type="stmt"/>
+        <line num="48" count="4" type="stmt"/>
         <line num="53" count="2" type="stmt"/>
-        <line num="61" count="1" type="stmt"/>
-        <line num="63" count="1" type="stmt"/>
-        <line num="68" count="1" type="stmt"/>
-        <line num="69" count="1" type="cond" truecount="1" falsecount="1"/>
-        <line num="70" count="0" type="stmt"/>
-        <line num="72" count="1" type="stmt"/>
-        <line num="73" count="1" type="cond" truecount="1" falsecount="1"/>
-        <line num="74" count="0" type="stmt"/>
-        <line num="76" count="1" type="stmt"/>
-        <line num="80" count="0" type="stmt"/>
+        <line num="54" count="2" type="stmt"/>
+        <line num="62" count="1" type="stmt"/>
+        <line num="64" count="1" type="stmt"/>
+        <line num="69" count="1" type="stmt"/>
+        <line num="70" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="71" count="0" type="stmt"/>
+        <line num="73" count="1" type="stmt"/>
+        <line num="74" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="75" count="0" type="stmt"/>
+        <line num="77" count="1" type="stmt"/>
+        <line num="81" count="0" type="stmt"/>
       </file>
       <file name="userController.js" path="C:\Users\affanabdillah\IdeaProjects\Project Hacktiv8\phase3\week3\Hacklingo-backend\controllers\userController.js">
         <metrics statements="33" coveredstatements="26" conditionals="12" coveredconditionals="7" methods="5" coveredmethods="5"/>
@@ -255,14 +283,14 @@
       </file>
       <file name="errorHandler.js" path="C:\Users\affanabdillah\IdeaProjects\Project Hacktiv8\phase3\week3\Hacklingo-backend\middlewares\errorHandler.js">
         <metrics statements="16" coveredstatements="12" conditionals="14" coveredconditionals="11" methods="1" coveredmethods="1"/>
-        <line num="3" count="39" type="cond" truecount="2" falsecount="0"/>
-        <line num="4" count="8" type="stmt"/>
-        <line num="7" count="31" type="cond" truecount="2" falsecount="0"/>
-        <line num="8" count="25" type="stmt"/>
-        <line num="11" count="6" type="cond" truecount="2" falsecount="0"/>
+        <line num="3" count="43" type="cond" truecount="2" falsecount="0"/>
+        <line num="4" count="9" type="stmt"/>
+        <line num="7" count="34" type="cond" truecount="2" falsecount="0"/>
+        <line num="8" count="27" type="stmt"/>
+        <line num="11" count="7" type="cond" truecount="2" falsecount="0"/>
         <line num="12" count="2" type="stmt"/>
-        <line num="15" count="4" type="cond" truecount="2" falsecount="0"/>
-        <line num="16" count="2" type="stmt"/>
+        <line num="15" count="5" type="cond" truecount="2" falsecount="0"/>
+        <line num="16" count="3" type="stmt"/>
         <line num="19" count="2" type="cond" truecount="2" falsecount="0"/>
         <line num="20" count="1" type="stmt"/>
         <line num="23" count="1" type="cond" truecount="1" falsecount="1"/>
@@ -286,22 +314,28 @@
       </file>
       <file name="userAuthentication.js" path="C:\Users\affanabdillah\IdeaProjects\Project Hacktiv8\phase3\week3\Hacklingo-backend\middlewares\userAuthentication.js">
         <metrics statements="12" coveredstatements="10" conditionals="6" coveredconditionals="4" methods="1" coveredmethods="1"/>
-        <line num="4" count="42" type="stmt"/>
-        <line num="7" count="42" type="stmt"/>
-        <line num="8" count="42" type="cond" truecount="2" falsecount="0"/>
-        <line num="9" count="2" type="stmt"/>
-        <line num="11" count="40" type="cond" truecount="1" falsecount="1"/>
+        <line num="4" count="52" type="stmt"/>
+        <line num="7" count="52" type="stmt"/>
+        <line num="8" count="52" type="cond" truecount="2" falsecount="0"/>
+        <line num="9" count="3" type="stmt"/>
+        <line num="11" count="49" type="cond" truecount="1" falsecount="1"/>
         <line num="12" count="0" type="stmt"/>
-        <line num="14" count="40" type="stmt"/>
-        <line num="15" count="40" type="cond" truecount="1" falsecount="1"/>
+        <line num="14" count="49" type="stmt"/>
+        <line num="15" count="49" type="cond" truecount="1" falsecount="1"/>
         <line num="16" count="0" type="stmt"/>
-        <line num="18" count="40" type="stmt"/>
-        <line num="19" count="40" type="stmt"/>
-        <line num="21" count="2" type="stmt"/>
+        <line num="18" count="49" type="stmt"/>
+        <line num="19" count="49" type="stmt"/>
+        <line num="21" count="3" type="stmt"/>
       </file>
     </package>
     <package name="Hacklingo-backend.models">
-      <metrics statements="19" coveredstatements="19" conditionals="2" coveredconditionals="2" methods="2" coveredmethods="2"/>
+      <metrics statements="22" coveredstatements="22" conditionals="2" coveredconditionals="2" methods="2" coveredmethods="2"/>
+      <file name="Article.js" path="C:\Users\affanabdillah\IdeaProjects\Project Hacktiv8\phase3\week3\Hacklingo-backend\models\Article.js">
+        <metrics statements="3" coveredstatements="3" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="2" count="1" type="stmt"/>
+        <line num="4" count="1" type="stmt"/>
+        <line num="22" count="1" type="stmt"/>
+      </file>
       <file name="Comment.js" path="C:\Users\affanabdillah\IdeaProjects\Project Hacktiv8\phase3\week3\Hacklingo-backend\models\Comment.js">
         <metrics statements="3" coveredstatements="3" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="2" count="1" type="stmt"/>
@@ -325,13 +359,13 @@
         <metrics statements="9" coveredstatements="9" conditionals="2" coveredconditionals="2" methods="1" coveredmethods="1"/>
         <line num="3" count="1" type="stmt"/>
         <line num="5" count="1" type="stmt"/>
-        <line num="84" count="1" type="stmt"/>
-        <line num="85" count="5" type="cond" truecount="2" falsecount="0"/>
-        <line num="86" count="2" type="stmt"/>
-        <line num="88" count="3" type="stmt"/>
-        <line num="89" count="3" type="stmt"/>
-        <line num="90" count="3" type="stmt"/>
-        <line num="95" count="1" type="stmt"/>
+        <line num="90" count="1" type="stmt"/>
+        <line num="91" count="6" type="cond" truecount="2" falsecount="0"/>
+        <line num="92" count="3" type="stmt"/>
+        <line num="94" count="3" type="stmt"/>
+        <line num="95" count="3" type="stmt"/>
+        <line num="96" count="3" type="stmt"/>
+        <line num="101" count="1" type="stmt"/>
       </file>
     </package>
   </project>

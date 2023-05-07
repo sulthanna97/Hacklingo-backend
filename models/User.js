@@ -71,6 +71,12 @@ const userSchema = new Schema(
         ref: "Post",
       },
     ],
+    articles: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Article",
+      },
+    ],
     comments: [
       {
         type: Schema.Types.ObjectId,

@@ -5,6 +5,7 @@ import User from "../models/User.js";
 class PostController {
   static async findPostsBySearch(req, res, next) {
     try {
+      console.log(req.query.search, "<<< inis search");
       const regex = new RegExp(req.query.search, "i");
       const posts = await Post.find({ title: regex });
       res.status(200).json(posts);

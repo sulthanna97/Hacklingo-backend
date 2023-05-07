@@ -13,6 +13,7 @@ import {
   commentAuthorization,
 } from "./middlewares/authorizations.js";
 import userAuthentication from "./middlewares/userAuthentication.js";
+import ArticleController from "./controllers/articleController.js";
 
 const app = express();
 
@@ -93,6 +94,9 @@ app.delete(
   commentAuthorization,
   CommentController.deleteCommentById
 );
+app.get("/articles", userAuthentication, ArticleController.findArticlesByTitle);
+app.get("/articles/:id", userAuthentication, ArticleController.findArticleById);
+app.post("/articles", userAuthentication, ArticleController.insertNewArticle);
 
 app.use(errorHandler);
 
