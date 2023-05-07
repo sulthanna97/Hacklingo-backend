@@ -86,7 +86,7 @@ describe("insert new User", () => {
   describe("successful inserts", () => {
     it.only("should return a new user after success", async () => {
       const { body, status } = await request(app)
-        .post("/register")
+        .post("/users/register")
         .send(newUserTestData[0].input);
       const newUser = body;
       userId = newUser._id;
@@ -100,7 +100,7 @@ describe("insert new User", () => {
 
     it("should return a new user after success with image", async () => {
       const { body, status } = await request(app)
-        .post("/register")
+        .post("/users/register")
         .send(newUserTestData[1].input);
       const newUser = body;
       expect(status).toBe(201);
@@ -117,7 +117,7 @@ describe("insert new User", () => {
   describe("failed inserts", () => {
     it.only("should return error with input without email", async () => {
       const { body, status } = await request(app)
-        .post("/register")
+        .post("/users/register")
         .send(newUserTestData[2].input);
       const newUser = body;
       expect(status).toBe(400);
@@ -127,7 +127,7 @@ describe("insert new User", () => {
 
     it.only("should return error with input without password", async () => {
       const { body, status } = await request(app)
-        .post("/register")
+        .post("/users/register")
         .send(newUserTestData[3].input);
       const newUser = body;
       expect(status).toBe(400);
@@ -137,7 +137,7 @@ describe("insert new User", () => {
 
     it.only("should return error with input without proper role", async () => {
       const { body, status } = await request(app)
-        .post("/register")
+        .post("/users/register")
         .send(newUserTestData[4].input);
       const newUser = body;
       expect(status).toBe(400);
@@ -149,7 +149,7 @@ describe("insert new User", () => {
 
     it.only("should return error with input without proper native language", async () => {
       const { body, status } = await request(app)
-        .post("/register")
+        .post("/users/register")
         .send(newUserTestData[5].input);
       const newUser = body;
       expect(status).toBe(400);
@@ -161,7 +161,7 @@ describe("insert new User", () => {
 
     it.only("should return error with duplicate input", async () => {
       const { body, status } = await request(app)
-        .post("/register")
+        .post("/users/register")
         .send(newUserTestData[6].input);
       const newUser = body;
       expect(status).toBe(400);
@@ -171,7 +171,7 @@ describe("insert new User", () => {
 
     it.only("should return error with empty username", async () => {
       const { body, status } = await request(app)
-        .post("/register")
+        .post("/users/register")
         .send(newUserTestData[7].input);
       const newUser = body;
       expect(status).toBe(400);
@@ -181,7 +181,7 @@ describe("insert new User", () => {
 
     it.only("should return error with empty email", async () => {
       const { body, status } = await request(app)
-        .post("/register")
+        .post("/users/register")
         .send(newUserTestData[8].input);
       const newUser = body;
       expect(status).toBe(400);
@@ -191,7 +191,7 @@ describe("insert new User", () => {
 
     it.only("should return error with empty password", async () => {
       const { body, status } = await request(app)
-        .post("/register")
+        .post("/users/register")
         .send(newUserTestData[9].input);
       const newUser = body;
       expect(status).toBe(400);
@@ -201,7 +201,7 @@ describe("insert new User", () => {
 
     it.only("should return error with password that didnt match regex", async () => {
       const { body, status } = await request(app)
-        .post("/register")
+        .post("/users/register")
         .send(newUserTestData[10].input);
       const newUser = body;
       expect(status).toBe(400);
@@ -213,7 +213,7 @@ describe("insert new User", () => {
 
     it.only("should return error with password that didnt match regex", async () => {
       const { body, status } = await request(app)
-        .post("/register")
+        .post("/users/register")
         .send(newUserTestData[11].input);
       const newUser = body;
       expect(status).toBe(400);
@@ -225,7 +225,7 @@ describe("insert new User", () => {
 
     it.only("should return error with password that didnt match regex", async () => {
       const { body, status } = await request(app)
-        .post("/register")
+        .post("/users/register")
         .send(newUserTestData[12].input);
       const newUser = body;
       expect(status).toBe(400);
@@ -237,7 +237,7 @@ describe("insert new User", () => {
 
     it.only("should return error with target language that doesn't pass array", async () => {
       const { body, status } = await request(app)
-        .post("/register")
+        .post("/users/register")
         .send(newUserTestData[13].input);
       const newUser = body;
       expect(status).toBe(400);

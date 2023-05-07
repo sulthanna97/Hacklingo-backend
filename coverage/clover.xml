@@ -1,41 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1683451345665" clover="3.2.0">
-  <project timestamp="1683451345665" name="All files">
-    <metrics statements="291" coveredstatements="242" conditionals="86" coveredconditionals="59" methods="39" coveredmethods="32" elements="416" coveredelements="333" complexity="0" loc="291" ncloc="291" packages="6" files="19" classes="19"/>
+<coverage generated="1683452882116" clover="3.2.0">
+  <project timestamp="1683452882116" name="All files">
+    <metrics statements="303" coveredstatements="254" conditionals="86" coveredconditionals="59" methods="39" coveredmethods="32" elements="428" coveredelements="345" complexity="0" loc="303" ncloc="303" packages="7" files="25" classes="25"/>
     <package name="Hacklingo-backend">
-      <metrics statements="30" coveredstatements="29" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
+      <metrics statements="10" coveredstatements="9" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
       <file name="app.js" path="C:\Users\affanabdillah\IdeaProjects\Project Hacktiv8\phase3\week3\Hacklingo-backend\app.js">
-        <metrics statements="30" coveredstatements="29" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
+        <metrics statements="10" coveredstatements="9" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
+        <line num="7" count="1" type="stmt"/>
+        <line num="9" count="1" type="stmt"/>
+        <line num="17" count="1" type="stmt"/>
         <line num="18" count="1" type="stmt"/>
+        <line num="19" count="1" type="stmt"/>
         <line num="20" count="1" type="stmt"/>
+        <line num="22" count="1" type="stmt"/>
+        <line num="23" count="0" type="stmt"/>
+        <line num="26" count="1" type="stmt"/>
         <line num="28" count="1" type="stmt"/>
-        <line num="29" count="1" type="stmt"/>
-        <line num="30" count="1" type="stmt"/>
-        <line num="31" count="1" type="stmt"/>
-        <line num="34" count="1" type="stmt"/>
-        <line num="35" count="0" type="stmt"/>
-        <line num="38" count="1" type="stmt"/>
-        <line num="43" count="1" type="stmt"/>
-        <line num="44" count="1" type="stmt"/>
-        <line num="45" count="1" type="stmt"/>
-        <line num="52" count="1" type="stmt"/>
-        <line num="58" count="1" type="stmt"/>
-        <line num="59" count="1" type="stmt"/>
-        <line num="60" count="1" type="stmt"/>
-        <line num="66" count="1" type="stmt"/>
-        <line num="73" count="1" type="stmt"/>
-        <line num="79" count="1" type="stmt"/>
-        <line num="80" count="1" type="stmt"/>
-        <line num="81" count="1" type="stmt"/>
-        <line num="82" count="1" type="stmt"/>
-        <line num="83" count="1" type="stmt"/>
-        <line num="84" count="1" type="stmt"/>
-        <line num="85" count="1" type="stmt"/>
-        <line num="91" count="1" type="stmt"/>
-        <line num="97" count="1" type="stmt"/>
-        <line num="98" count="1" type="stmt"/>
-        <line num="99" count="1" type="stmt"/>
-        <line num="101" count="1" type="stmt"/>
       </file>
     </package>
     <package name="Hacklingo-backend.config">
@@ -366,6 +346,59 @@
         <line num="95" count="3" type="stmt"/>
         <line num="96" count="3" type="stmt"/>
         <line num="101" count="1" type="stmt"/>
+      </file>
+    </package>
+    <package name="Hacklingo-backend.routes">
+      <metrics statements="32" coveredstatements="32" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      <file name="articleRoutes.js" path="C:\Users\affanabdillah\IdeaProjects\Project Hacktiv8\phase3\week3\Hacklingo-backend\routes\articleRoutes.js">
+        <metrics statements="4" coveredstatements="4" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="4" count="1" type="stmt"/>
+        <line num="6" count="1" type="stmt"/>
+        <line num="7" count="1" type="stmt"/>
+        <line num="8" count="1" type="stmt"/>
+      </file>
+      <file name="commentRoutes.js" path="C:\Users\affanabdillah\IdeaProjects\Project Hacktiv8\phase3\week3\Hacklingo-backend\routes\commentRoutes.js">
+        <metrics statements="5" coveredstatements="5" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="5" count="1" type="stmt"/>
+        <line num="7" count="1" type="stmt"/>
+        <line num="8" count="1" type="stmt"/>
+        <line num="9" count="1" type="stmt"/>
+        <line num="15" count="1" type="stmt"/>
+      </file>
+      <file name="forumRoutes.js" path="C:\Users\affanabdillah\IdeaProjects\Project Hacktiv8\phase3\week3\Hacklingo-backend\routes\forumRoutes.js">
+        <metrics statements="5" coveredstatements="5" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="4" count="1" type="stmt"/>
+        <line num="6" count="1" type="stmt"/>
+        <line num="7" count="1" type="stmt"/>
+        <line num="8" count="1" type="stmt"/>
+        <line num="9" count="1" type="stmt"/>
+      </file>
+      <file name="index.js" path="C:\Users\affanabdillah\IdeaProjects\Project Hacktiv8\phase3\week3\Hacklingo-backend\routes\index.js">
+        <metrics statements="6" coveredstatements="6" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="7" count="1" type="stmt"/>
+        <line num="9" count="1" type="stmt"/>
+        <line num="10" count="1" type="stmt"/>
+        <line num="11" count="1" type="stmt"/>
+        <line num="12" count="1" type="stmt"/>
+        <line num="13" count="1" type="stmt"/>
+      </file>
+      <file name="postRoutes.js" path="C:\Users\affanabdillah\IdeaProjects\Project Hacktiv8\phase3\week3\Hacklingo-backend\routes\postRoutes.js">
+        <metrics statements="6" coveredstatements="6" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="6" count="1" type="stmt"/>
+        <line num="8" count="1" type="stmt"/>
+        <line num="9" count="1" type="stmt"/>
+        <line num="10" count="1" type="stmt"/>
+        <line num="16" count="1" type="stmt"/>
+        <line num="23" count="1" type="stmt"/>
+      </file>
+      <file name="userRoutes.js" path="C:\Users\affanabdillah\IdeaProjects\Project Hacktiv8\phase3\week3\Hacklingo-backend\routes\userRoutes.js">
+        <metrics statements="6" coveredstatements="6" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="6" count="1" type="stmt"/>
+        <line num="8" count="1" type="stmt"/>
+        <line num="13" count="1" type="stmt"/>
+        <line num="14" count="1" type="stmt"/>
+        <line num="15" count="1" type="stmt"/>
+        <line num="22" count="1" type="stmt"/>
       </file>
     </package>
   </project>
