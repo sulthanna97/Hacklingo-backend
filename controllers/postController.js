@@ -30,8 +30,8 @@ class PostController {
 
   static async insertNewPost(req, res, next) {
     try {
-      const newPost = new Post({...req.body, postImageUrl : req.imageUrl});
-      const user = await User.findById(req.body.userId);
+      const newPost = new Post({...req.body, userId: req.userId,  postImageUrl : req.imageUrl});
+      const user = await User.findById(req.userId);
       const forum = await Forum.findById(req.body.forumId);
       await newPost.save();
       user.posts.push(newPost._id);
@@ -46,20 +46,14 @@ class PostController {
 
   static async updatePostById(req, res, next) {
     try {
-      if (req.params.id.length !== 24) {
-        throw { name: "NotFound" };
-      }
       const updatedPost = await Post.findByIdAndUpdate(
         req.params.id,
-        {...req.body, postImageUrl: req.imageUrl},
+        {...req.body, userId: req.userId, postImageUrl: req.imageUrl},
         {
           returnDocument: "after",
           runValidators: true,
         }
       );
-      if (!updatedPost) {
-        throw { name: "NotFound" };
-      }
       res.status(200).json(updatedPost);
     } catch (err) {
       next(err);

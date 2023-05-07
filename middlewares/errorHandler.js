@@ -20,7 +20,16 @@ function errorHandler(err, req, res, next) {
     res.status(400).json({
       message : "This username/email has been taken"
     })
+  } else if (err.name === "MongoBulkWriteError") {
+    res.status(400).json({
+      message : "Forum name already exists"
+    })
+  } else if (err.name === "InvalidImage") {
+    res.status(400).json({
+      message : "You have invalid image"
+    })
   } else {
+    console.log(err);
     res.status(500).json({
       message: "Internal server error"
     })

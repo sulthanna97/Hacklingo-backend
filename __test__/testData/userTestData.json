@@ -11,6 +11,16 @@
   },
   {
     "input": {
+      "username": "test",
+      "email": "test@mail.com",
+      "password": "Test123",
+      "nativeLanguage": "Indonesian/Bahasa Indonesia",
+      "targetLanguage": ["Indonesian/Bahasa Indonesia", "English"],
+      "role": "regular"
+    }
+  },
+  {
+    "input": {
       "username": "test2",
       "password": "Test123",
       "nativeLanguage": "Indonesian/Bahasa Indonesia",

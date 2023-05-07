@@ -24,6 +24,9 @@ class UserController {
 
   static async findUserById(req, res, next) {
     try {
+      if (req.params.id.length !== 24) {
+        throw { name: "NotFound" };
+      }
       const user = await User.findById(req.params.id).populate([
         "posts",
         "comments",
@@ -54,7 +57,7 @@ class UserController {
       }
       const updatedUser = await User.findByIdAndUpdate(
         req.params.id,
-        {...req.body, profileImageUrl : req.imageUrl},
+        {...req.body, userId: req.userId, profileImageUrl : req.imageUrl},
         {
           returnDocument: "after",
           runValidators: true,
