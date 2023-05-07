@@ -1,13 +1,14 @@
-import uploadImage from "../helpers/upload-image.js";
+import uploadFile from "../helpers/upload-image.js";
 
 async function uploadMiddleware(req, res, next) {
   try {
     if (req.file) {
       const myFile = req.file;
-      if (!myFile.mimetype.includes('image')) {
-        throw {name : "InvalidImage"}
+      // Check if the file type is image or audio
+      if (!myFile.mimetype.includes('image') && !myFile.mimetype.includes('audio')) {
+        throw {name : "InvalidFile"}
       }
-      const imageUrl = await uploadImage(myFile);
+      const imageUrl = await uploadFile(myFile);
       req.imageUrl = imageUrl;
     }
     next();

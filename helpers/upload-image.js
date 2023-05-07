@@ -11,7 +11,7 @@ const bucket = gc.bucket("hacklingo_images"); // should be your bucket name
  *   "originalname" and "buffer" as keys
  */
 
-const uploadImage = (file) =>
+const uploadFile = (file) =>
   new Promise((resolve, reject) => {
     const { originalname, buffer } = file;
 
@@ -30,4 +30,4 @@ const uploadImage = (file) =>
       .end(buffer);
   });
 
-export default uploadImage;
+export default uploadFile;

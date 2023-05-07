@@ -277,7 +277,7 @@ describe("insert new User", () => {
       const newUser = body;
       expect(status).toBe(400);
       expect(newUser).toHaveProperty("message");
-      expect(newUser.message).toBe("You have invalid image");
+      expect(newUser.message).toBe("You have invalid file");
     });
 
     it.only("should return error when the image size is too large", async () => {
@@ -332,6 +332,28 @@ describe("insert new Article", () => {
     it.only("should return an error with input without userId", async () => {
       const { body, status } = await request(app)
         .post("/articles")
+        .send({ ...newArticlesTestData[1] });
+      const newArticle = body;
+      expect(status).toBe(401);
+      expect(newArticle).toHaveProperty("message");
+      expect(newArticle.message).toBe("You do not have access to this action");
+    });
+
+    it.only("should return an error with input with malformed userId", async () => {
+      const { body, status } = await request(app)
+        .post("/articles")
+        .set("userid", "1235893758973485")
+        .send({ ...newArticlesTestData[1] });
+      const newArticle = body;
+      expect(status).toBe(401);
+      expect(newArticle).toHaveProperty("message");
+      expect(newArticle.message).toBe("You do not have access to this action");
+    });
+
+    it.only("should return an error with input with invalid userId", async () => {
+      const { body, status } = await request(app)
+        .post("/articles")
+        .set("userid", "123456789012345678901234")
         .send({ ...newArticlesTestData[1] });
       const newArticle = body;
       expect(status).toBe(401);

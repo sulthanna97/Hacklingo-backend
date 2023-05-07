@@ -24,9 +24,9 @@ function errorHandler(err, req, res, next) {
     res.status(400).json({
       message : "Forum name already exists"
     })
-  } else if (err.name === "InvalidImage") {
+  } else if (err.name === "InvalidFile") {
     res.status(400).json({
-      message : "You have invalid image"
+      message : "You have invalid file"
     })
   } else if (err.name === "MulterError") {
     res.status(400).json({
