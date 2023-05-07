@@ -16,15 +16,20 @@ const newPostTestData = JSON.parse(
 const newCommentTestData = JSON.parse(
   fs.readFileSync("__test__/testData/commentTestData.json", "utf-8")
 );
+const newArticlesTestData = JSON.parse(
+  fs.readFileSync("__test__/testData/articleTestData.json", "utf-8")
+);
 import User from "../models/User.js";
 import Post from "../models/Post";
 import Forum from "../models/Forum.js";
 import Comment from "../models/Comment.js";
+import Article from "../models/Article.js";
 
 let userId = "";
 let forumId = "";
 let postId = "";
 let commentId = "";
+let articleId = "";
 let dummyUserId = "";
 // before the tests we spin up a new Apollo Server
 beforeAll(async () => {
@@ -46,6 +51,7 @@ afterAll(async () => {
   await User.deleteMany();
   await Post.deleteMany();
   await Comment.deleteMany();
+  await Article.deleteMany();
 });
 
 describe("insert new forums", () => {
@@ -80,7 +86,7 @@ describe("insert new User", () => {
   describe("successful inserts", () => {
     it.only("should return a new user after success", async () => {
       const { body, status } = await request(app)
-        .post("/register")
+        .post("/users/register")
         .send(newUserTestData[0].input);
       const newUser = body;
       userId = newUser._id;
@@ -94,7 +100,7 @@ describe("insert new User", () => {
 
     it("should return a new user after success with image", async () => {
       const { body, status } = await request(app)
-        .post("/register")
+        .post("/users/register")
         .send(newUserTestData[1].input);
       const newUser = body;
       expect(status).toBe(201);
@@ -111,7 +117,7 @@ describe("insert new User", () => {
   describe("failed inserts", () => {
     it.only("should return error with input without email", async () => {
       const { body, status } = await request(app)
-        .post("/register")
+        .post("/users/register")
         .send(newUserTestData[2].input);
       const newUser = body;
       expect(status).toBe(400);
@@ -121,7 +127,7 @@ describe("insert new User", () => {
 
     it.only("should return error with input without password", async () => {
       const { body, status } = await request(app)
-        .post("/register")
+        .post("/users/register")
         .send(newUserTestData[3].input);
       const newUser = body;
       expect(status).toBe(400);
@@ -131,7 +137,7 @@ describe("insert new User", () => {
 
     it.only("should return error with input without proper role", async () => {
       const { body, status } = await request(app)
-        .post("/register")
+        .post("/users/register")
         .send(newUserTestData[4].input);
       const newUser = body;
       expect(status).toBe(400);
@@ -143,7 +149,7 @@ describe("insert new User", () => {
 
     it.only("should return error with input without proper native language", async () => {
       const { body, status } = await request(app)
-        .post("/register")
+        .post("/users/register")
         .send(newUserTestData[5].input);
       const newUser = body;
       expect(status).toBe(400);
@@ -155,7 +161,7 @@ describe("insert new User", () => {
 
     it.only("should return error with duplicate input", async () => {
       const { body, status } = await request(app)
-        .post("/register")
+        .post("/users/register")
         .send(newUserTestData[6].input);
       const newUser = body;
       expect(status).toBe(400);
@@ -165,7 +171,7 @@ describe("insert new User", () => {
 
     it.only("should return error with empty username", async () => {
       const { body, status } = await request(app)
-        .post("/register")
+        .post("/users/register")
         .send(newUserTestData[7].input);
       const newUser = body;
       expect(status).toBe(400);
@@ -175,7 +181,7 @@ describe("insert new User", () => {
 
     it.only("should return error with empty email", async () => {
       const { body, status } = await request(app)
-        .post("/register")
+        .post("/users/register")
         .send(newUserTestData[8].input);
       const newUser = body;
       expect(status).toBe(400);
@@ -185,7 +191,7 @@ describe("insert new User", () => {
 
     it.only("should return error with empty password", async () => {
       const { body, status } = await request(app)
-        .post("/register")
+        .post("/users/register")
         .send(newUserTestData[9].input);
       const newUser = body;
       expect(status).toBe(400);
@@ -195,26 +201,103 @@ describe("insert new User", () => {
 
     it.only("should return error with password that didnt match regex", async () => {
       const { body, status } = await request(app)
-        .post("/register")
+        .post("/users/register")
         .send(newUserTestData[10].input);
       const newUser = body;
       expect(status).toBe(400);
       expect(newUser).toHaveProperty("message");
       expect(newUser.message).toBe(
-        "Password has to have at least 1 number and 1 capital letter"
+        "Password has to have at least 1 number and 1 capital letter, and minimum 6 characters"
+      );
+    });
+
+    it.only("should return error with password that didnt match regex", async () => {
+      const { body, status } = await request(app)
+        .post("/users/register")
+        .send(newUserTestData[11].input);
+      const newUser = body;
+      expect(status).toBe(400);
+      expect(newUser).toHaveProperty("message");
+      expect(newUser.message).toBe(
+        "Password has to have at least 1 number and 1 capital letter, and minimum 6 characters"
+      );
+    });
+
+    it.only("should return error with password that didnt match regex", async () => {
+      const { body, status } = await request(app)
+        .post("/users/register")
+        .send(newUserTestData[12].input);
+      const newUser = body;
+      expect(status).toBe(400);
+      expect(newUser).toHaveProperty("message");
+      expect(newUser.message).toBe(
+        "Password has to have at least 1 number and 1 capital letter, and minimum 6 characters"
       );
     });
 
     it.only("should return error with target language that doesn't pass array", async () => {
       const { body, status } = await request(app)
-        .post("/register")
-        .send(newUserTestData[11].input);
+        .post("/users/register")
+        .send(newUserTestData[13].input);
       const newUser = body;
       expect(status).toBe(400);
       expect(newUser).toHaveProperty("message");
       expect(newUser.message).toBe(
         "Target language is not in any of the options"
       );
+    });
+  });
+});
+
+describe("insert new Article", () => {
+  describe("successful inserts", () => {
+    it.only("should return a new article after success", async () => {
+      const { body, status } = await request(app)
+        .post("/articles")
+        .set("userid", userId)
+        .send({ ...newArticlesTestData[0]});
+      const newArticle = body;
+      articleId = newArticle._id;
+      expect(status).toBe(201);
+      expect(newArticle).toHaveProperty("_id");
+      expect(newArticle).toHaveProperty("title");
+      expect(newArticle).toHaveProperty("content");
+      expect(newArticle).toHaveProperty("userId");
+      expect(newArticle.title).toBe("English is the best");
+    });
+  });
+
+  describe("failed inserts", () => {
+    it.only("should return an error with input without userId", async () => {
+      const { body, status } = await request(app)
+      .post("/articles")
+      .send({ ...newArticlesTestData[1]});
+      const newArticle = body;
+      expect(status).toBe(401);
+      expect(newArticle).toHaveProperty("message");
+      expect(newArticle.message).toBe("You do not have access to this action");
+    });
+
+    it.only("should return an error with input with empty title", async () => {
+      const { body, status } = await request(app)
+        .post("/articles")
+        .set("userid", userId)
+        .send({ ...newArticlesTestData[2] });
+      const newArticle = body;
+      expect(status).toBe(400);
+      expect(newArticle).toHaveProperty("message");
+      expect(newArticle.message).toBe("Title is required");
+    });
+
+    it.only("should return an error with empty content", async () => {
+      const { body, status } = await request(app)
+        .post("/articles")
+        .set("userid", userId)
+        .send({ ...newArticlesTestData[3] });
+      const newArticle = body;
+      expect(status).toBe(400);
+      expect(newArticle).toHaveProperty("message");
+      expect(newArticle.message).toBe("Content is required");
     });
   });
 });
@@ -744,6 +827,36 @@ describe("find Post based on their id", () => {
   });
 });
 
+describe("find Post based on title", () => {
+  describe("successful fetch", () => {
+    it.only("should return posts after success", async () => {
+      const search = "nu";
+      const { body, status } = await request(app)
+        .get(`/posts`)
+        .query({search})
+        .set("userid", userId);
+      const posts = body;
+      console.log(posts);
+      expect(status).toBe(200);
+      expect(posts).toHaveLength(1);
+      expect(posts[0].title).toMatch(/nu/);
+    });
+  });
+
+  describe("zero fetch", () => {
+    it.only("should return error with random search", async () => {
+      const search = "hfhsfhsahflsfl";
+      const { body, status } = await request(app)
+        .get(`/posts`)
+        .query({search})
+        .set("userid", userId);
+      const articles = body;
+      expect(status).toBe(200);
+      expect(articles).toHaveLength(0);
+    });
+  });
+});
+
 describe("find Comment based on their id", () => {
   describe("successful fetch", () => {
     it.only("should return comment after success", async () => {
@@ -770,6 +883,65 @@ describe("find Comment based on their id", () => {
       expect(status).toBe(404);
       expect(comment).toHaveProperty("message");
       expect(comment.message).toBe("Data not found");
+    });
+  });
+});
+
+describe("find Article based on their id", () => {
+  describe("successful fetch", () => {
+    it.only("should return article after success", async () => {
+      const { body, status } = await request(app)
+        .get(`/articles/${articleId}`)
+        .set("userid", userId);
+      const article = body;
+      expect(status).toBe(200);
+      expect(typeof article).toBe("object");
+      expect(article).toHaveProperty("_id");
+      expect(article).toHaveProperty("content");
+      expect(article).toHaveProperty("title");
+      expect(article).toHaveProperty("userId");
+      expect(article.title).toBe("English is the best");
+    });
+  });
+
+  describe("fetch with nonexistant id", () => {
+    it.only("should return error with wrong id", async () => {
+      const { body, status } = await request(app)
+        .get(`/articles/jakfjslkfkljfsjfljfs`)
+        .set("userid", userId);
+      const post = body;
+      expect(status).toBe(404);
+      expect(post).toHaveProperty("message");
+      expect(post.message).toBe("Data not found");
+    });
+  });
+});
+
+describe("find Article based on title", () => {
+  describe("successful fetch", () => {
+    it.only("should return articles after success", async () => {
+      const search = "English";
+      const { body, status } = await request(app)
+        .get(`/articles`)
+        .query({search})
+        .set("userid", userId);
+      const articles = body;
+      expect(status).toBe(200);
+      expect(articles).toHaveLength(1);
+      expect(articles[0].title).toMatch(/English/);
+    });
+  });
+
+  describe("zero fetch", () => {
+    it.only("should return error with random search", async () => {
+      const search = "hfhsfhsahflsfl";
+      const { body, status } = await request(app)
+        .get(`/articles`)
+        .query({search})
+        .set("userid", userId);
+      const articles = body;
+      expect(status).toBe(200);
+      expect(articles).toHaveLength(0);
     });
   });
 });

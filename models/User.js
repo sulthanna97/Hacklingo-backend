@@ -1,4 +1,5 @@
 import mongoose from "../config/connectToMongoDB.js";
+import { hashPassword } from "../helpers/bcrypt.js";
 const { Schema } = mongoose;
 
 const userSchema = new Schema(
@@ -16,12 +17,7 @@ const userSchema = new Schema(
     password: {
       type: String,
       required: [true, "Password is required"],
-      validate: {
-        validator: (str) => {
-          return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]+$/.test(str);
-        },
-        message: "Password has to have at least 1 number and 1 capital letter",
-      },
+      match: [/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{6,}$/, "Password has to have at least 1 number and 1 capital letter, and minimum 6 characters"],
     },
     nativeLanguage: {
       type: String,
@@ -66,13 +62,19 @@ const userSchema = new Schema(
             "Others",
           ],
           message: "Target language is not in any of the options",
-        }
+        },
       },
     ],
     posts: [
       {
         type: Schema.Types.ObjectId,
         ref: "Post",
+      },
+    ],
+    articles: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Article",
       },
     ],
     comments: [
@@ -84,6 +86,17 @@ const userSchema = new Schema(
   },
   { timestamps: true }
 );
+
+userSchema.pre("save", function(next) {
+  if (!this.isModified("password")) {
+    return next();
+  }
+  try {
+    this.password = hashPassword(this.password);
+    next();
+  } catch (err) {
+  }
+});
 
 const User = mongoose.model("User", userSchema);
 

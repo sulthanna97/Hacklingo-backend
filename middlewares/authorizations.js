@@ -1,6 +1,6 @@
-import Comment from "../models/Comment";
-import Post from "../models/Post";
-import User from "../models/User";
+import Comment from "../models/Comment.js";
+import Post from "../models/Post.js";
+import User from "../models/User.js";
 
 async function userAuthorization(req, res, next) {
   try {

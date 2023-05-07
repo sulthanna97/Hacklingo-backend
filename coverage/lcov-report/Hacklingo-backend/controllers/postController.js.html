@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">75% </span>
+                <span class="strong">86.48% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>27/36</span>
+                <span class='fraction'>32/37</span>
             </div>
         
             
@@ -37,16 +37,16 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">80% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>4/5</span>
+                <span class='fraction'>5/5</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">75% </span>
+                <span class="strong">86.48% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>27/36</span>
+                <span class='fraction'>32/37</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line medium'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -144,16 +144,22 @@
 <a name='L79'></a><a href='#L79'>79</a>
 <a name='L80'></a><a href='#L80'>80</a>
 <a name='L81'></a><a href='#L81'>81</a>
-<a name='L82'></a><a href='#L82'>82</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L82'></a><a href='#L82'>82</a>
+<a name='L83'></a><a href='#L83'>83</a>
+<a name='L84'></a><a href='#L84'>84</a>
+<a name='L85'></a><a href='#L85'>85</a>
+<a name='L86'></a><a href='#L86'>86</a>
+<a name='L87'></a><a href='#L87'>87</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -177,6 +183,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-yes">5x</span>
@@ -230,11 +240,12 @@ import Post from "../models/Post.js";
 import User from "../models/User.js";
 &nbsp;
 class PostController {
-<span class="fstat-no" title="function not covered" >  st</span>atic async findPostsBySearch(req, res, next) {
-<span class="cstat-no" title="statement not covered" >    try {</span>
-      const regex = <span class="cstat-no" title="statement not covered" >new RegExp(req.query.search, "i");</span>
-      const posts = <span class="cstat-no" title="statement not covered" >await Post.find({ title: regex });</span>
-<span class="cstat-no" title="statement not covered" >      res.status(200).json(posts);</span>
+  static async findPostsBySearch(req, res, next) {
+    try {
+      console.log(req.query.search, "&lt;&lt;&lt; inis search");
+      const regex = new RegExp(req.query.search, "i");
+      const posts = await Post.find({ title: regex });
+      res.status(200).json(posts);
     } catch (err) {
 <span class="cstat-no" title="statement not covered" >      next(err);</span>
     }
@@ -257,14 +268,18 @@ class PostController {
 &nbsp;
   static async insertNewPost(req, res, next) {
     try {
-      const newPost = new Post({...req.body, userId: req.userId,  postImageUrl : req.imageUrl});
+      const newPost = new Post({
+        ...req.body,
+        userId: req.userId,
+        postImageUrl: req.imageUrl,
+      });
       const user = await User.findById(req.userId);
       const forum = await Forum.findById(req.body.forumId);
       await newPost.save();
       user.posts.push(newPost._id);
       forum.posts.push(newPost._id);
-      await user.save();
-      await forum.save();
+      await user.save({ validateBeforeSave: false });
+      await forum.save({ validateBeforeSave: false });
       res.status(201).json(newPost);
     } catch (err) {
       next(err);
@@ -275,7 +290,7 @@ class PostController {
     try {
       const updatedPost = await Post.findByIdAndUpdate(
         req.params.id,
-        {...req.body, userId: req.userId, postImageUrl: req.imageUrl},
+        { ...req.body, userId: req.userId, postImageUrl: req.imageUrl },
         {
           returnDocument: "after",
           runValidators: true,
@@ -313,7 +328,7 @@ export default PostController;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-05-07T03:01:29.188Z
+                at 2023-05-07T09:48:01.973Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
