@@ -59,12 +59,10 @@ async function commentAuthorization(req, res, next) {
     const comment = await Comment.findById(req.params.id);
     // If current user doesnt match the id of to-be-updated comment, throw 401
     if (!comment) {
-      console.log("masuk sini");
       throw { name: "NotFound" };
     }
     // If current user doesnt match the id of to-be-updated comment, throw 403
     if (comment.userId.toString() !== userId) {
-      console.log("masuk sini");
       throw { name: "Forbidden" };
     }
     next();

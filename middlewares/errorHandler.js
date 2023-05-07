@@ -28,6 +28,10 @@ function errorHandler(err, req, res, next) {
     res.status(400).json({
       message : "You have invalid image"
     })
+  } else if (err.name === "MulterError") {
+    res.status(400).json({
+      message : "File too large"
+    })
   } else {
     console.log(err);
     res.status(500).json({
