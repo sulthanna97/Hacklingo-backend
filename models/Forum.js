@@ -1,4 +1,4 @@
-const mongoose = require("../config/connectToMongoDB.js");
+import mongoose from "../config/connectToMongoDB.js";
 const { Schema } = mongoose;
 
 const forumSchema = new Schema(
@@ -7,6 +7,14 @@ const forumSchema = new Schema(
       type: String,
       required: true,
       unique: true
+    },
+    description: {
+      type: String,
+      required: true
+    },
+    flagImage : {
+      type: String,
+      required: true
     },
     posts: [
       {
@@ -20,4 +28,4 @@ const forumSchema = new Schema(
 
 const Forum = mongoose.model("Forum", forumSchema);
 
-module.exports = Forum;
+export default Forum;

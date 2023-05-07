@@ -1,4 +1,4 @@
-const mongoose =require("../config/connectToMongoDB.js");
+import mongoose from "../config/connectToMongoDB.js";
 const { Schema } = mongoose;
 
 const postSchema = new Schema(
@@ -21,6 +21,9 @@ const postSchema = new Schema(
       type: String,
       required: [true, "Content is required"], 
     },
+    postImageUrl: {
+      type: String
+    },
     forumId: {
       type: Schema.Types.ObjectId,
       required: [true, "Forum Id is required"],
@@ -37,4 +40,4 @@ const postSchema = new Schema(
 
 const Post = mongoose.model("Post", postSchema);
 
-module.exports = Post;
+export default Post;
