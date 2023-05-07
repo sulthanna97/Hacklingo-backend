@@ -11,6 +11,7 @@ userRouter.get(
   UserController.findAllUsersByNativeLanguage
 );
 userRouter.get("/:id", userAuthentication, UserController.findUserById);
+userRouter.post("/login", UserController.login);
 userRouter.post("/register", uploadMiddleware, UserController.insertNewUser);
 userRouter.put(
   "/:id",

@@ -32,6 +32,10 @@ function errorHandler(err, req, res, next) {
     res.status(400).json({
       message : "File too large"
     })
+  } else if (err.name === "InvalidLogin") {
+    res.status(401).json({
+      message : "Email/Password is incorrect"
+    })
   } else {
     console.log(err);
     res.status(500).json({

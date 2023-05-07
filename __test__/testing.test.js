@@ -310,6 +310,87 @@ describe("insert new User", () => {
   });
 });
 
+describe("login User", () => {
+  describe("successfull login", () => {
+    it.only("should return user data after login", async () => {
+      const { body, status } = await request(app)
+        .post("/users/login")
+        .set("userid", userId)
+        .send({
+          email: newUserTestData[0].input.email,
+          password: newUserTestData[0].input.password,
+        });
+      const user = body;
+      console.log(user, "<<<< ini user");
+      expect(status).toBe(200);
+      expect(user).toHaveProperty("_id");
+      expect(user).toHaveProperty("username");
+      expect(user).toHaveProperty("email");
+      expect(user).toHaveProperty("role");
+      expect(user.username).toBe("test");
+    });
+  });
+
+  describe("failed logins", () => {
+    it.only("should return error with wrong email", async () => {
+      const { body, status } = await request(app)
+        .post("/users/login")
+        .set("userid", userId)
+        .send({
+          email: "afnafnafn@mail.com",
+          password: newUserTestData[0].input.password,
+        });
+      const user = body;
+      expect(status).toBe(401);
+      expect(user).toHaveProperty("message");
+      expect(user.message).toBe("Email/Password is incorrect");
+    });
+
+    it.only("should return error with wrong password", async () => {
+      const { body, status } = await request(app)
+        .post("/users/login")
+        .set("userid", userId)
+        .send({
+          email: newUserTestData[0].input.password,
+          password: "ajfflkjfklsjdafljslkfjl",
+        });
+      const user = body;
+      expect(status).toBe(401);
+      expect(user).toHaveProperty("message");
+      expect(user.message).toBe("Email/Password is incorrect");
+    });
+
+    it.only("should return error with empty email", async () => {
+      const { body, status } = await request(app)
+        .post("/users/login")
+        .set("userid", userId)
+        .send({
+          email: "",
+          password: newUserTestData[0].input.password,
+        });
+      const user = body;
+      expect(status).toBe(401);
+      expect(user).toHaveProperty("message");
+      expect(user.message).toBe("Email/Password is incorrect");
+    });
+
+    it.only("should return error with empty password", async () => {
+      const { body, status } = await request(app)
+        .post("/users/login")
+        .set("userid", userId)
+        .send({
+          email: newUserTestData[0].input.email,
+          password: "",
+        });
+      const user = body;
+      console.log(user, "<<<< ini user");
+      expect(status).toBe(401);
+      expect(user).toHaveProperty("message");
+      expect(user.message).toBe("Email/Password is incorrect");
+    });
+  });
+});
+
 describe("insert new Article", () => {
   describe("successful inserts", () => {
     it.only("should return a new article after success", async () => {
@@ -418,7 +499,9 @@ describe("insert new Post", () => {
       const newPost = body;
       expect(status).toBe(201);
       expect(newPost).toHaveProperty("postImageUrl");
-      expect(newPost.postImageUrl).toBe("https://storage.cloud.google.com/hacklingo_images/Borobudur_Temple.jpg");
+      expect(newPost.postImageUrl).toBe(
+        "https://storage.cloud.google.com/hacklingo_images/Borobudur_Temple.jpg"
+      );
     });
   });
 
