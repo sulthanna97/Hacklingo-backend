@@ -26,8 +26,8 @@ class CommentController {
       await newComment.save();
       user.comments.push(newComment._id);
       post.comments.push(newComment._id);
-      await user.save();
-      await post.save();
+      await user.save({ validateBeforeSave: false });
+      await post.save({ validateBeforeSave: false });
       res.status(201).json(newComment);
     } catch (err) {
       next(err);
@@ -36,7 +36,6 @@ class CommentController {
 
   static async updateCommentById(req, res, next) {
     try {
-      console.log("masuk sini");
       const updatedComment = await Comment.findByIdAndUpdate(
         req.params.id,
         req.body,

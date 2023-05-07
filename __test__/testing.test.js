@@ -201,14 +201,38 @@ describe("insert new User", () => {
       expect(status).toBe(400);
       expect(newUser).toHaveProperty("message");
       expect(newUser.message).toBe(
-        "Password has to have at least 1 number and 1 capital letter"
+        "Password has to have at least 1 number and 1 capital letter, and minimum 6 characters"
+      );
+    });
+
+    it.only("should return error with password that didnt match regex", async () => {
+      const { body, status } = await request(app)
+        .post("/register")
+        .send(newUserTestData[11].input);
+      const newUser = body;
+      expect(status).toBe(400);
+      expect(newUser).toHaveProperty("message");
+      expect(newUser.message).toBe(
+        "Password has to have at least 1 number and 1 capital letter, and minimum 6 characters"
+      );
+    });
+
+    it.only("should return error with password that didnt match regex", async () => {
+      const { body, status } = await request(app)
+        .post("/register")
+        .send(newUserTestData[12].input);
+      const newUser = body;
+      expect(status).toBe(400);
+      expect(newUser).toHaveProperty("message");
+      expect(newUser.message).toBe(
+        "Password has to have at least 1 number and 1 capital letter, and minimum 6 characters"
       );
     });
 
     it.only("should return error with target language that doesn't pass array", async () => {
       const { body, status } = await request(app)
         .post("/register")
-        .send(newUserTestData[11].input);
+        .send(newUserTestData[13].input);
       const newUser = body;
       expect(status).toBe(400);
       expect(newUser).toHaveProperty("message");

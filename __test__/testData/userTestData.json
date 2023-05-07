@@ -3,7 +3,7 @@
     "input": {
       "username": "test",
       "email": "test@mail.com",
-      "password": "Test123",
+      "password": "Test123@",
       "nativeLanguage": "Indonesian/Bahasa Indonesia",
       "targetLanguage": ["Indonesian/Bahasa Indonesia", "English"],
       "role": "regular"
@@ -102,6 +102,26 @@
       "username": "test8",
       "email": "tes@mail.com",
       "password": "123456",
+      "nativeLanguage": "Indonesian/Bahasa Indonesia",
+      "targetLanguage": ["Indonesian/Bahasa Indonesia", "English"],
+      "role": "regular"
+    }
+  },
+  {
+    "input": {
+      "username": "test8",
+      "email": "tes@mail.com",
+      "password": "Testtesttest",
+      "nativeLanguage": "Indonesian/Bahasa Indonesia",
+      "targetLanguage": ["Indonesian/Bahasa Indonesia", "English"],
+      "role": "regular"
+    }
+  },
+  {
+    "input": {
+      "username": "test8",
+      "email": "tes@mail.com",
+      "password": "234test$56",
       "nativeLanguage": "Indonesian/Bahasa Indonesia",
       "targetLanguage": ["Indonesian/Bahasa Indonesia", "English"],
       "role": "regular"

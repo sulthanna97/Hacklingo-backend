@@ -30,14 +30,18 @@ class PostController {
 
   static async insertNewPost(req, res, next) {
     try {
-      const newPost = new Post({...req.body, userId: req.userId,  postImageUrl : req.imageUrl});
+      const newPost = new Post({
+        ...req.body,
+        userId: req.userId,
+        postImageUrl: req.imageUrl,
+      });
       const user = await User.findById(req.userId);
       const forum = await Forum.findById(req.body.forumId);
       await newPost.save();
       user.posts.push(newPost._id);
       forum.posts.push(newPost._id);
-      await user.save();
-      await forum.save();
+      await user.save({ validateBeforeSave: false });
+      await forum.save({ validateBeforeSave: false });
       res.status(201).json(newPost);
     } catch (err) {
       next(err);
@@ -48,7 +52,7 @@ class PostController {
     try {
       const updatedPost = await Post.findByIdAndUpdate(
         req.params.id,
-        {...req.body, userId: req.userId, postImageUrl: req.imageUrl},
+        { ...req.body, userId: req.userId, postImageUrl: req.imageUrl },
         {
           returnDocument: "after",
           runValidators: true,
