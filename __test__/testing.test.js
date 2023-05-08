@@ -126,6 +126,7 @@ describe("insert new User", () => {
         .field("nativeLanguage", newUserTestData[1].input.nativeLanguage)
         .field("targetLanguage", newUserTestData[1].input.targetLanguage)
         .field("role", newUserTestData[1].input.role)
+        .field("context", "image")
         .set("Content-Type", "multipart/form-data")
         .attach("file", filePath, "Borobudur_Temple.jpg");
       const newUser = body;
@@ -285,6 +286,7 @@ describe("insert new User", () => {
         .field("nativeLanguage", newUserTestData[14].input.nativeLanguage)
         .field("targetLanguage", newUserTestData[14].input.targetLanguage)
         .field("role", newUserTestData[14].input.role)
+        .field("context", "image")
         .set("Content-Type", "multipart/form-data")
         .attach("file", filePath, "test.txt");
       const newUser = body;
@@ -303,6 +305,7 @@ describe("insert new User", () => {
         .field("nativeLanguage", newUserTestData[14].input.nativeLanguage)
         .field("targetLanguage", newUserTestData[14].input.targetLanguage)
         .field("role", newUserTestData[14].input.role)
+        .field("context", "image")
         .set("Content-Type", "multipart/form-data")
         .attach("file", filePath, "test_too_large.jpg");
       const newUser = body;
@@ -506,6 +509,7 @@ describe("insert new Post", () => {
         .field("title", newPostTestData[1].input.title)
         .field("content", newPostTestData[1].input.content)
         .field("forumId", forumId)
+        .field("context", "image")
         .set("Content-Type", "multipart/form-data")
         .set("userid", userId)
         .attach("file", filePath, "Borobudur_Temple.jpg");
@@ -643,13 +647,14 @@ describe("update User by Id", () => {
   // this is the query for our test
 
   describe("successful update", () => {
-    it.only("should return the updated user after success", async () => {
+    it.only("should return the updated user after success with image", async () => {
       const filePath = path.join(__dirname, "testImages/Stupa_Borobudur.jpg");
       const { body, status } = await request(app)
         .put(`/users/${userId}`)
         .field("username", "test edit")
         .field("nativeLanguage", "German/Deutsch")
         .field("targetLanguage", ["English", "German/Deutsch"])
+        .field("context", "image")
         .set("Content-Type", "multipart/form-data")
         .set("userid", userId)
         .attach("file", filePath, "Stupa_Borobudur.jpg");

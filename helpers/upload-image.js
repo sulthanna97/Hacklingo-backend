@@ -14,7 +14,6 @@ const bucket = gc.bucket("hacklingo_images"); // should be your bucket name
 const uploadFile = (file) =>
   new Promise((resolve, reject) => {
     const { originalname, buffer } = file;
-
     const blob = bucket.file(originalname.replace(/ /g, "_"));
     const blobStream = blob.createWriteStream({
       resumable: false,
