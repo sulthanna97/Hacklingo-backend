@@ -20,7 +20,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 app.get("/", (req, res) => {
-  res.send({ message: "Hello guys!!!" });
+  res.status(200).json({ message: "Hello guys!!!" });
 });
 
 app.use(router);

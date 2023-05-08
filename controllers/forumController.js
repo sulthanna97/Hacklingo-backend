@@ -5,7 +5,7 @@ class ForumController {
     try {
       const forums = await Forum.find(
         {},
-        { createdAt: 0, updatedAt: 0, description: 0 }
+        { createdAt: 0, updatedAt: 0, description: 0, posts: 0 }
       );
       res.status(200).json(forums);
     } catch (err) {

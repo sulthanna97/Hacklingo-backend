@@ -59,6 +59,19 @@ afterAll(async () => {
   await Article.deleteMany();
 });
 
+describe("open server", () => {
+  describe("success open", () => {
+    it.only("should return message after success", async () => {
+      const { body, status } = await request(app)
+        .get("/");
+      const response = body;
+      expect(status).toBe(200);
+      expect(response).toHaveProperty("message");
+      expect(response.message).toBe("Hello guys!!!");
+    })
+  })
+})
+
 describe("insert new forums", () => {
   describe("successful inserts", () => {
     it.only("should return inserted Ids after success", async () => {
@@ -890,6 +903,7 @@ describe("find Users based on their native language", () => {
         .query({ nativeLanguage })
         .set("userid", userId);
       const users = body;
+      console.log(users, "<<<< ini users di test");
       expect(status).toBe(200);
       expect(users).toHaveLength(1);
       expect(users[0]).toHaveProperty("_id");

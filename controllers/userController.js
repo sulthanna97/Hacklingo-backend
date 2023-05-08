@@ -14,6 +14,7 @@ class UserController {
           profileImageUrl: 0,
           __v: 0,
           password: 0,
+          articles: 0
         }
       );
       res.status(200).json(users);
@@ -30,6 +31,7 @@ class UserController {
       const user = await User.findById(req.params.id).populate([
         "posts",
         "comments",
+        "articles"
       ]);
       if (!user) {
         throw { name: "NotFound" };
@@ -75,6 +77,7 @@ class UserController {
 
   static async updateUserById(req, res, next) {
     try {
+      console.log(req.body, "<<<< masuk ke server");
       const updatedUser = await User.findByIdAndUpdate(
         req.params.id,
         { ...req.body, userId: req.userId, profileImageUrl: req.imageUrl },
@@ -88,6 +91,7 @@ class UserController {
             comments: 0,
             __v: 0,
             password: 0,
+            articles: 0
           },
         }
       );

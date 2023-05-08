@@ -20,7 +20,10 @@ class ArticleController {
   static async findArticlesByTitle(req, res, next) {
     try {
       const regex = new RegExp(req.query.search, "i");
-      const articles = await Article.find({ title: regex });
+      const articles = await Article.find(
+        { title: regex },
+        { content: 0, createdAt: 0, updatedAt: 0, __v: 0 }
+      );
       res.status(200).json(articles);
     } catch (err) {
       next(err);
