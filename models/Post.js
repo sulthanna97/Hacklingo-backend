@@ -1,23 +1,32 @@
-const mongoose =require("../config/connectToMongoDB.js");
+import mongoose from "../config/connectToMongoDB.js";
 const { Schema } = mongoose;
 
 const postSchema = new Schema(
   {
     userId: {
       type: Schema.ObjectId,
-      required: true,
+      required: [true, "User Id is required"],
     },
     title: {
       type: String,
-      required: true,
+      required: [true, "Title is required"],
+      validate: {
+        validator: (str) => {
+          return str.length <= 120;
+        },
+        message: "Max title length is 120 characters"
+      }
     },
     content: {
       type: String,
-      required: true, 
+      required: [true, "Content is required"], 
+    },
+    postImageUrl: {
+      type: String
     },
     forumId: {
       type: Schema.Types.ObjectId,
-      required: true,
+      required: [true, "Forum Id is required"],
     },
     comments: [
       {
@@ -31,4 +40,4 @@ const postSchema = new Schema(
 
 const Post = mongoose.model("Post", postSchema);
 
-module.exports = Post;
+export default Post;
