@@ -4,8 +4,15 @@ import User from "../models/User.js";
 class UserController {
   static async findAllUsersByNativeLanguage(req, res, next) {
     try {
+      const search = req.query.search;
+      const searchRegex = new RegExp(search, "i");
       const users = await User.find(
-        { nativeLanguage: req.query.nativeLanguage },
+        {
+          $or: [
+            { nativeLanguage: req.query.nativeLanguage },
+            { search : searchRegex } // Behaves like iLike
+          ],
+        },
         {
           createdAt: 0,
           updatedAt: 0,
@@ -14,7 +21,7 @@ class UserController {
           profileImageUrl: 0,
           __v: 0,
           password: 0,
-          articles: 0
+          articles: 0,
         }
       );
       res.status(200).json(users);
@@ -31,7 +38,7 @@ class UserController {
       const user = await User.findById(req.params.id).populate([
         "posts",
         "comments",
-        "articles"
+        "articles",
       ]);
       if (!user) {
         throw { name: "NotFound" };
@@ -91,7 +98,7 @@ class UserController {
             comments: 0,
             __v: 0,
             password: 0,
-            articles: 0
+            articles: 0,
           },
         }
       );
