@@ -10,7 +10,7 @@ class UserController {
         {
           $or: [
             { nativeLanguage: req.query.nativeLanguage },
-            { search : searchRegex } // Behaves like iLike
+            { username : searchRegex } // Behaves like iLike
           ],
         },
         {
