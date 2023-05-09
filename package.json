@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "cross-env NODE_ENV=test NODE_OPTIONS=--experimental-vm-modules npx jest --coverage --runInBand --forceExit",
-    "start": "nodemon server.js"
+    "start": "nodemon server.js",
+    "prod" : "cross-env NODE_ENV=production npx nodemon server.js"
   },
   "repository": {
     "type": "git",

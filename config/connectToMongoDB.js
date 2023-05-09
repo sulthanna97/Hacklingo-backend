@@ -2,13 +2,20 @@ import mongoose from "mongoose";
 
 main().catch((err) => console.log(err));
 
-// Change url to mongodb://127.0.0.1:27017/HacklingoDBTest for testing, and mongodb://127.0.0.1:27017/HacklingoDB for development
-
 async function main() {
-  const url =
-    process.env.NODE_ENV === "test"
-      ? "mongodb://127.0.0.1:27017/HacklingoDBTest"
-      : "mongodb://127.0.0.1:27017/HacklingoDB";
+
+let url;
+
+if (process.env.NODE_ENV === "production") {
+  url = "mongodb+srv://afnabdillah:Nevermore1@afnabdillah.x4hdysh.mongodb.net/Hacklingo_DB";
+} else if (process.env.NODE_ENV === "test") {
+  url = "mongodb://127.0.0.1:27017/HacklingoDBTest"
+} else {
+  url = "mongodb://127.0.0.1:27017/HacklingoDB";
+}
+
+console.log(url, "<<< ini url mongoDB");
+
   await mongoose.connect(url);
 }
 
