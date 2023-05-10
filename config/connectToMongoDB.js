@@ -3,18 +3,18 @@ import mongoose from "mongoose";
 main().catch((err) => console.log(err));
 
 async function main() {
+  let url;
 
-let url;
+  if (process.env.NODE_ENV === "production") {
+    url =
+      "mongodb+srv://afnabdillah:Nevermore1@afnabdillah.x4hdysh.mongodb.net/Hacklingo_DB";
+  } else if (process.env.NODE_ENV === "test") {
+    url = "mongodb://127.0.0.1:27017/HacklingoDBTest";
+  } else {
+    url = "mongodb://127.0.0.1:27017/HacklingoDB";
+  }
 
-if (process.env.NODE_ENV === "production") {
-  url = "mongodb+srv://afnabdillah:Nevermore1@afnabdillah.x4hdysh.mongodb.net/Hacklingo_DB";
-} else if (process.env.NODE_ENV === "test") {
-  url = "mongodb://127.0.0.1:27017/HacklingoDBTest"
-} else {
-  url = "mongodb://127.0.0.1:27017/HacklingoDB";
-}
-
-console.log(url, "<<< ini url mongoDB");
+  console.log(url, "<<< ini url mongoDB");
 
   await mongoose.connect(url);
 }

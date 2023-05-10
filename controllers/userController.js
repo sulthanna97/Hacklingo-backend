@@ -2,17 +2,34 @@ import { checkPassword } from "../helpers/bcrypt.js";
 import User from "../models/User.js";
 
 class UserController {
+
   static async findAllUsersByNativeLanguage(req, res, next) {
     try {
-      const search = req.query.search;
-      const searchRegex = new RegExp(search, "i");
       const users = await User.find(
+        { nativeLanguage: req.query.nativeLanguage },
         {
-          $or: [
-            { nativeLanguage: req.query.nativeLanguage },
-            { username : searchRegex } // Behaves like iLike
-          ],
-        },
+          createdAt: 0,
+          updatedAt: 0,
+          posts: 0,
+          comments: 0,
+          profileImageUrl: 0,
+          __v: 0,
+          password: 0,
+          articles: 0,
+        }
+      );
+      res.status(200).json(users);
+    } catch (err) {
+      next(err);
+    }
+  }
+
+  static async findAllUsersBySearch(req, res, next) {
+    try {
+      const searchRegex = new RegExp(req.query.search, "i");
+      console.log(req.query.search, "<<<< masuk sini");
+      const users = await User.find(
+        { username: searchRegex },
         {
           createdAt: 0,
           updatedAt: 0,
@@ -84,7 +101,6 @@ class UserController {
 
   static async updateUserById(req, res, next) {
     try {
-      console.log(req.body, "<<<< masuk ke server");
       const updatedUser = await User.findByIdAndUpdate(
         req.params.id,
         { ...req.body, userId: req.userId, profileImageUrl: req.imageUrl },

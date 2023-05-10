@@ -137,7 +137,7 @@ describe("insert new User", () => {
       expect(newUser).toHaveProperty("profileImageUrl");
       expect(newUser).toHaveProperty("role");
       expect(newUser.profileImageUrl).toBe(
-        "https://storage.cloud.google.com/hacklingo_images/Borobudur_Temple.jpg"
+        "https://storage.googleapis.com/hacklingo_images/Borobudur_Temple.jpg"
       );
       expect(newUser.role).toBe("regular");
     });
@@ -337,7 +337,6 @@ describe("login User", () => {
           password: newUserTestData[0].input.password,
         });
       const user = body;
-      console.log(user, "<<<< ini user");
       expect(status).toBe(200);
       expect(user).toHaveProperty("_id");
       expect(user).toHaveProperty("username");
@@ -399,7 +398,6 @@ describe("login User", () => {
           password: "",
         });
       const user = body;
-      console.log(user, "<<<< ini user");
       expect(status).toBe(401);
       expect(user).toHaveProperty("message");
       expect(user.message).toBe("Email/Password is incorrect");
@@ -517,7 +515,7 @@ describe("insert new Post", () => {
       expect(status).toBe(201);
       expect(newPost).toHaveProperty("postImageUrl");
       expect(newPost.postImageUrl).toBe(
-        "https://storage.cloud.google.com/hacklingo_images/Borobudur_Temple.jpg"
+        "https://storage.googleapis.com/hacklingo_images/Borobudur_Temple.jpg"
       );
     });
   });
@@ -666,7 +664,7 @@ describe("update User by Id", () => {
       expect(updatedUser).toHaveProperty("email");
       expect(updatedUser.username).toBe("test edit");
       expect(updatedUser.profileImageUrl).toBe(
-        "https://storage.cloud.google.com/hacklingo_images/Stupa_Borobudur.jpg"
+        "https://storage.googleapis.com/hacklingo_images/Stupa_Borobudur.jpg"
       );
     });
   });
@@ -803,6 +801,39 @@ describe("update User by Id", () => {
         "You are forbidden from doing this action"
       );
     });
+
+    it.only("should return error with invalid image type", async () => {
+      const filePath = path.join(__dirname, "testImages/test.txt");
+      const { body, status } = await request(app)
+        .put(`/users/${userId}`)
+        .field("username", "test edit")
+        .field("nativeLanguage", "German/Deutsch")
+        .field("targetLanguage", ["English", "German/Deutsch"])
+        .field("context", "audio")
+        .set("Content-Type", "multipart/form-data")
+        .set("userid", userId)
+        .attach("file", filePath, "Stupa_Borobudur.jpg");
+      const updatedUser = body;
+      expect(status).toBe(400);
+      expect(updatedUser).toHaveProperty("message");
+      expect(updatedUser.message).toBe("You have invalid file");
+    });
+
+    it.only("should return error with invalid upload context", async () => {
+      const filePath = path.join(__dirname, "testImages/Stupa_Borobudur.jpg");
+      const { body, status } = await request(app)
+        .put(`/users/${userId}`)
+        .field("username", "test edit")
+        .field("nativeLanguage", "German/Deutsch")
+        .field("targetLanguage", ["English", "German/Deutsch"])
+        .set("Content-Type", "multipart/form-data")
+        .set("userid", userId)
+        .attach("file", filePath, "Stupa_Borobudur.jpg");
+      const updatedUser = body;
+      expect(status).toBe(400);
+      expect(updatedUser).toHaveProperty("message");
+      expect(updatedUser.message).toBe("You have invalid file");
+    });
   });
 });
 
@@ -908,13 +939,27 @@ describe("find Users based on their native language", () => {
         .query({ nativeLanguage })
         .set("userid", userId);
       const users = body;
-      console.log(users, "<<<< ini users di test");
       expect(status).toBe(200);
       expect(users).toHaveLength(1);
       expect(users[0]).toHaveProperty("_id");
       expect(users[0]).toHaveProperty("username");
       expect(users[0]).toHaveProperty("email");
       expect(users[0].nativeLanguage).toBe(nativeLanguage);
+    });
+
+    it.only("should return array of users after success", async () => {
+      const search = "dummy";
+      const { body, status } = await request(app)
+        .get(`/users/usernames`)
+        .query({ search })
+        .set("userid", userId);
+      const users = body;
+      expect(status).toBe(200);
+      expect(users).toHaveLength(1);
+      expect(users[0]).toHaveProperty("_id");
+      expect(users[0]).toHaveProperty("username");
+      expect(users[0]).toHaveProperty("email");
+      expect(users[0].username).toMatch(/dummy/);
     });
   });
 
@@ -1170,7 +1215,7 @@ describe("find All Forums", () => {
       expect(forums).toHaveLength(7);
       expect(forums[0]).toHaveProperty("_id");
       expect(forums[0]).toHaveProperty("name");
-      expect(forums[0].name).toBe("English");
+      expect(forums[0].name).toBe("Dutch/Nederlands");
     });
   });
 });

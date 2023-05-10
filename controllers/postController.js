@@ -18,7 +18,10 @@ class PostController {
       if (req.params.id.length !== 24) {
         throw { name: "NotFound" };
       }
-      const post = await Post.findById(req.params.id).populate("comments");
+      const post = await Post.findById(req.params.id).populate([
+        "comments",
+        { path: "userId", select: "_id username email" },
+      ]);
       if (!post) {
         throw { name: "NotFound" };
       }

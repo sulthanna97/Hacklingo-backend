@@ -10,6 +10,11 @@ userRouter.get(
   userAuthentication,
   UserController.findAllUsersByNativeLanguage
 );
+userRouter.get(
+  "/usernames",
+  userAuthentication,
+  UserController.findAllUsersBySearch
+);
 userRouter.get("/:id", userAuthentication, UserController.findUserById);
 userRouter.post("/login", UserController.login);
 userRouter.post("/register", uploadMiddleware, UserController.insertNewUser);

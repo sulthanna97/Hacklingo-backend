@@ -1,4 +1,3 @@
-import util from "util";
 import gc from "../config/connectToGoogleCloudStorage.js";
 const bucket = gc.bucket("hacklingo_images"); // should be your bucket name
 
@@ -20,7 +19,7 @@ const uploadFile = (file) =>
     });
     blobStream
       .on("finish", () => {
-        const publicUrl = `https://storage.cloud.google.com/${bucket.name}/${blob.name}`; // I will change the blob.name to image._id from graphQL
+        const publicUrl = `https://storage.googleapis.com/${bucket.name}/${blob.name}`; // I will change the blob.name to image._id from graphQL
         resolve(publicUrl);
       })
       .on("error", (err) => {

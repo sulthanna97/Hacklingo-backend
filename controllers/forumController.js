@@ -6,7 +6,7 @@ class ForumController {
       const forums = await Forum.find(
         {},
         { createdAt: 0, updatedAt: 0, description: 0, posts: 0 }
-      );
+      ).sort({name: 1});
       res.status(200).json(forums);
     } catch (err) {
       next(err);
@@ -21,7 +21,7 @@ class ForumController {
       const forum = await Forum.findById(req.params.id, {
         createdAt: 0,
         updatedAt: 0,
-      }).populate("posts");
+      }).populate("posts").sort({createdAt: 1});
       if (!forum) {
         throw { name: "NotFound" };
       }
