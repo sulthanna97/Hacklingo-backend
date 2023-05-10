@@ -62,15 +62,14 @@ afterAll(async () => {
 describe("open server", () => {
   describe("success open", () => {
     it.only("should return message after success", async () => {
-      const { body, status } = await request(app)
-        .get("/");
+      const { body, status } = await request(app).get("/");
       const response = body;
       expect(status).toBe(200);
       expect(response).toHaveProperty("message");
       expect(response.message).toBe("Hello guys!!!");
-    })
-  })
-})
+    });
+  });
+});
 
 describe("insert new forums", () => {
   describe("successful inserts", () => {
@@ -1065,13 +1064,13 @@ describe("find Post based on their id", () => {
   });
 });
 
-describe("find Post based on title", () => {
+describe("find Post based on title and forumId", () => {
   describe("successful fetch", () => {
     it.only("should return posts after success", async () => {
       const search = "nu";
       const { body, status } = await request(app)
         .get(`/posts`)
-        .query({ search })
+        .query({ forumId, search })
         .set("userid", userId);
       const posts = body;
       expect(status).toBe(200);

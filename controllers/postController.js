@@ -6,7 +6,9 @@ class PostController {
   static async findPostsBySearch(req, res, next) {
     try {
       const regex = new RegExp(req.query.search, "i");
-      const posts = await Post.find({ title: regex });
+      const posts = await Post.find({
+        $and: [{ forumId: req.query.forumId }, { title: regex }],
+      });
       res.status(200).json(posts);
     } catch (err) {
       next(err);
