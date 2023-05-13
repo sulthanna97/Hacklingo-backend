@@ -3,3 +3,4 @@ node_modules
 hacklingo-images-key.json
 ecosystem.config.js
 Dockerfile
+.dockerignore
