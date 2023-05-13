@@ -48,6 +48,24 @@ beforeAll(async () => {
   });
   await newDummyUser.save();
   dummyUserId = newDummyUser._id;
+  const newDummyUser2 = new User({
+    username: "test dummy 2",
+    email: "test_dummy2@mail.com",
+    password: "Test123",
+    nativeLanguage: "German/Deutsch",
+    targetLanguage: ["Indonesian/Bahasa Indonesia", "English"],
+    role: "regular",
+  });
+  await newDummyUser2.save();
+  const newDummyUser3 = new User({
+    username: "test dummy3",
+    email: "test_dummy3@mail.com",
+    password: "Test123",
+    nativeLanguage: "English",
+    targetLanguage: ["Indonesian/Bahasa Indonesia", "English"],
+    role: "regular",
+  });
+  await newDummyUser3.save();
 });
 
 // after the tests we'll stop the server
@@ -104,8 +122,16 @@ describe("insert new User", () => {
     it.only("should return a new user after success", async () => {
       const { body, status } = await request(app)
         .post("/users/register")
-        .send(newUserTestData[0].input);
+        .field("username", newUserTestData[0].input.username)
+        .field("email", newUserTestData[0].input.email)
+        .field("password", newUserTestData[0].input.password)
+        .field("nativeLanguage", newUserTestData[0].input.nativeLanguage)
+        .field("targetLanguage", JSON.stringify(newUserTestData[0].input.targetLanguage))
+        .field("role", newUserTestData[0].input.role)
+        .field("context", "image")
+        .set("Content-Type", "multipart/form-data")
       const newUser = body;
+      // console.log(newUser, "<<<< ini new user");
       userId = newUser._id;
       expect(status).toBe(201);
       expect(newUser).toHaveProperty("_id");
@@ -123,7 +149,7 @@ describe("insert new User", () => {
         .field("email", newUserTestData[1].input.email)
         .field("password", newUserTestData[1].input.password)
         .field("nativeLanguage", newUserTestData[1].input.nativeLanguage)
-        .field("targetLanguage", newUserTestData[1].input.targetLanguage)
+        .field("targetLanguage", JSON.stringify(newUserTestData[1].input.targetLanguage))
         .field("role", newUserTestData[1].input.role)
         .field("context", "image")
         .set("Content-Type", "multipart/form-data")
@@ -146,7 +172,13 @@ describe("insert new User", () => {
     it.only("should return error with input without email", async () => {
       const { body, status } = await request(app)
         .post("/users/register")
-        .send(newUserTestData[2].input);
+        .field("username", newUserTestData[2].input.username)
+        .field("password", newUserTestData[2].input.password)
+        .field("nativeLanguage", newUserTestData[2].input.nativeLanguage)
+        .field("targetLanguage", JSON.stringify(newUserTestData[2].input.targetLanguage))
+        .field("role", newUserTestData[2].input.role)
+        .field("context", "image")
+        .set("Content-Type", "multipart/form-data")
       const newUser = body;
       expect(status).toBe(400);
       expect(newUser).toHaveProperty("message");
@@ -156,7 +188,13 @@ describe("insert new User", () => {
     it.only("should return error with input without password", async () => {
       const { body, status } = await request(app)
         .post("/users/register")
-        .send(newUserTestData[3].input);
+        .field("email", newUserTestData[3].input.email)
+        .field("username", newUserTestData[3].input.username)
+        .field("nativeLanguage", newUserTestData[3].input.nativeLanguage)
+        .field("targetLanguage", JSON.stringify(newUserTestData[3].input.targetLanguage))
+        .field("role", newUserTestData[3].input.role)
+        .field("context", "image")
+        .set("Content-Type", "multipart/form-data")
       const newUser = body;
       expect(status).toBe(400);
       expect(newUser).toHaveProperty("message");
@@ -166,7 +204,14 @@ describe("insert new User", () => {
     it.only("should return error with input without proper role", async () => {
       const { body, status } = await request(app)
         .post("/users/register")
-        .send(newUserTestData[4].input);
+        .field("email", newUserTestData[4].input.email)
+        .field("username", newUserTestData[4].input.username)
+        .field("password", newUserTestData[4].input.password)
+        .field("nativeLanguage", newUserTestData[4].input.nativeLanguage)
+        .field("targetLanguage", JSON.stringify(newUserTestData[4].input.targetLanguage))
+        .field("role", newUserTestData[4].input.role)
+        .field("context", "image")
+        .set("Content-Type", "multipart/form-data")
       const newUser = body;
       expect(status).toBe(400);
       expect(newUser).toHaveProperty("message");
@@ -178,7 +223,14 @@ describe("insert new User", () => {
     it.only("should return error with input without proper native language", async () => {
       const { body, status } = await request(app)
         .post("/users/register")
-        .send(newUserTestData[5].input);
+        .field("email", newUserTestData[5].input.email)
+        .field("username", newUserTestData[5].input.username)
+        .field("password", newUserTestData[5].input.password)
+        .field("nativeLanguage", newUserTestData[5].input.nativeLanguage)
+        .field("targetLanguage", JSON.stringify(newUserTestData[5].input.targetLanguage))
+        .field("role", newUserTestData[5].input.role)
+        .field("context", "image")
+        .set("Content-Type", "multipart/form-data")
       const newUser = body;
       expect(status).toBe(400);
       expect(newUser).toHaveProperty("message");
@@ -190,7 +242,14 @@ describe("insert new User", () => {
     it.only("should return error with duplicate input", async () => {
       const { body, status } = await request(app)
         .post("/users/register")
-        .send(newUserTestData[6].input);
+        .field("email", newUserTestData[6].input.email)
+        .field("username", newUserTestData[6].input.username)
+        .field("password", newUserTestData[6].input.password)
+        .field("nativeLanguage", newUserTestData[6].input.nativeLanguage)
+        .field("targetLanguage", JSON.stringify(newUserTestData[6].input.targetLanguage))
+        .field("role", newUserTestData[6].input.role)
+        .field("context", "image")
+        .set("Content-Type", "multipart/form-data")
       const newUser = body;
       expect(status).toBe(400);
       expect(newUser).toHaveProperty("message");
@@ -200,7 +259,14 @@ describe("insert new User", () => {
     it.only("should return error with empty username", async () => {
       const { body, status } = await request(app)
         .post("/users/register")
-        .send(newUserTestData[7].input);
+        .field("email", newUserTestData[7].input.email)
+        .field("username", newUserTestData[7].input.username)
+        .field("password", newUserTestData[7].input.password)
+        .field("nativeLanguage", newUserTestData[7].input.nativeLanguage)
+        .field("targetLanguage", JSON.stringify(newUserTestData[7].input.targetLanguage))
+        .field("role", newUserTestData[7].input.role)
+        .field("context", "image")
+        .set("Content-Type", "multipart/form-data")
       const newUser = body;
       expect(status).toBe(400);
       expect(newUser).toHaveProperty("message");
@@ -210,7 +276,14 @@ describe("insert new User", () => {
     it.only("should return error with empty email", async () => {
       const { body, status } = await request(app)
         .post("/users/register")
-        .send(newUserTestData[8].input);
+        .field("email", newUserTestData[8].input.email)
+        .field("username", newUserTestData[8].input.username)
+        .field("password", newUserTestData[8].input.password)
+        .field("nativeLanguage", newUserTestData[8].input.nativeLanguage)
+        .field("targetLanguage", JSON.stringify(newUserTestData[8].input.targetLanguage))
+        .field("role", newUserTestData[8].input.role)
+        .field("context", "image")
+        .set("Content-Type", "multipart/form-data")
       const newUser = body;
       expect(status).toBe(400);
       expect(newUser).toHaveProperty("message");
@@ -220,7 +293,14 @@ describe("insert new User", () => {
     it.only("should return error with empty password", async () => {
       const { body, status } = await request(app)
         .post("/users/register")
-        .send(newUserTestData[9].input);
+        .field("email", newUserTestData[9].input.email)
+        .field("username", newUserTestData[9].input.username)
+        .field("password", newUserTestData[9].input.password)
+        .field("nativeLanguage", newUserTestData[9].input.nativeLanguage)
+        .field("targetLanguage", JSON.stringify(newUserTestData[9].input.targetLanguage))
+        .field("role", newUserTestData[9].input.role)
+        .field("context", "image")
+        .set("Content-Type", "multipart/form-data")
       const newUser = body;
       expect(status).toBe(400);
       expect(newUser).toHaveProperty("message");
@@ -230,7 +310,14 @@ describe("insert new User", () => {
     it.only("should return error with password that didnt match regex", async () => {
       const { body, status } = await request(app)
         .post("/users/register")
-        .send(newUserTestData[10].input);
+        .field("email", newUserTestData[10].input.email)
+        .field("username", newUserTestData[10].input.username)
+        .field("password", newUserTestData[10].input.password)
+        .field("nativeLanguage", newUserTestData[10].input.nativeLanguage)
+        .field("targetLanguage", JSON.stringify(newUserTestData[10].input.targetLanguage))
+        .field("role", newUserTestData[10].input.role)
+        .field("context", "image")
+        .set("Content-Type", "multipart/form-data")
       const newUser = body;
       expect(status).toBe(400);
       expect(newUser).toHaveProperty("message");
@@ -242,7 +329,14 @@ describe("insert new User", () => {
     it.only("should return error with password that didnt match regex", async () => {
       const { body, status } = await request(app)
         .post("/users/register")
-        .send(newUserTestData[11].input);
+        .field("email", newUserTestData[11].input.email)
+        .field("username", newUserTestData[11].input.username)
+        .field("password", newUserTestData[11].input.password)
+        .field("nativeLanguage", newUserTestData[11].input.nativeLanguage)
+        .field("targetLanguage", JSON.stringify(newUserTestData[11].input.targetLanguage))
+        .field("role", newUserTestData[11].input.role)
+        .field("context", "image")
+        .set("Content-Type", "multipart/form-data")
       const newUser = body;
       expect(status).toBe(400);
       expect(newUser).toHaveProperty("message");
@@ -254,7 +348,14 @@ describe("insert new User", () => {
     it.only("should return error with password that didnt match regex", async () => {
       const { body, status } = await request(app)
         .post("/users/register")
-        .send(newUserTestData[12].input);
+        .field("email", newUserTestData[12].input.email)
+        .field("username", newUserTestData[12].input.username)
+        .field("password", newUserTestData[12].input.password)
+        .field("nativeLanguage", newUserTestData[12].input.nativeLanguage)
+        .field("targetLanguage", JSON.stringify(newUserTestData[12].input.targetLanguage))
+        .field("role", newUserTestData[12].input.role)
+        .field("context", "image")
+        .set("Content-Type", "multipart/form-data")
       const newUser = body;
       expect(status).toBe(400);
       expect(newUser).toHaveProperty("message");
@@ -266,7 +367,14 @@ describe("insert new User", () => {
     it.only("should return error with target language that doesn't pass array", async () => {
       const { body, status } = await request(app)
         .post("/users/register")
-        .send(newUserTestData[13].input);
+        .field("email", newUserTestData[13].input.email)
+        .field("username", newUserTestData[13].input.username)
+        .field("password", newUserTestData[13].input.password)
+        .field("nativeLanguage", newUserTestData[13].input.nativeLanguage)
+        .field("targetLanguage", JSON.stringify(newUserTestData[13].input.targetLanguage))
+        .field("role", newUserTestData[13].input.role)
+        .field("context", "image")
+        .set("Content-Type", "multipart/form-data")
       const newUser = body;
       expect(status).toBe(400);
       expect(newUser).toHaveProperty("message");
@@ -316,7 +424,14 @@ describe("insert new User", () => {
     it.only("should return error with invalid email format", async () => {
       const { body, status } = await request(app)
         .post("/users/register")
-        .send(newUserTestData[15].input);
+        .field("email", newUserTestData[15].input.email)
+        .field("username", newUserTestData[15].input.username)
+        .field("password", newUserTestData[15].input.password)
+        .field("nativeLanguage", newUserTestData[15].input.nativeLanguage)
+        .field("targetLanguage", JSON.stringify(newUserTestData[15].input.targetLanguage))
+        .field("role", newUserTestData[15].input.role)
+        .field("context", "image")
+        .set("Content-Type", "multipart/form-data")
       const newUser = body;
       expect(status).toBe(400);
       expect(newUser).toHaveProperty("message");
@@ -932,18 +1047,19 @@ describe("update Comment by Id", () => {
 describe("find Users based on their native language", () => {
   describe("successful fetch", () => {
     it.only("should return array of users after success", async () => {
-      const nativeLanguage = newUserTestData[0].input.nativeLanguage;
+      const targetLanguage = ["Indonesian/Bahasa Indonesia", "English"];
       const { body, status } = await request(app)
         .get(`/users`)
-        .query({ nativeLanguage })
+        .query({ targetLanguage })
         .set("userid", userId);
       const users = body;
+      console.log(users, "<<<< ini users hasil find users by native language");
       expect(status).toBe(200);
-      expect(users).toHaveLength(1);
+      expect(users).toHaveLength(2);
       expect(users[0]).toHaveProperty("_id");
       expect(users[0]).toHaveProperty("username");
       expect(users[0]).toHaveProperty("email");
-      expect(users[0].nativeLanguage).toBe(nativeLanguage);
+      expect(users[0].nativeLanguage).toMatch("Indonesian/Bahasa Indonesia");
     });
 
     it.only("should return array of users after success", async () => {
@@ -954,7 +1070,7 @@ describe("find Users based on their native language", () => {
         .set("userid", userId);
       const users = body;
       expect(status).toBe(200);
-      expect(users).toHaveLength(1);
+      expect(users).toHaveLength(3);
       expect(users[0]).toHaveProperty("_id");
       expect(users[0]).toHaveProperty("username");
       expect(users[0]).toHaveProperty("email");
@@ -964,10 +1080,10 @@ describe("find Users based on their native language", () => {
 
   describe("zero fetch", () => {
     it.only("should return error with empty content", async () => {
-      const nativeLanguage = "English";
+      const targetLanguage = ["Japanase/日本語"];
       const { body, status } = await request(app)
         .get(`/users`)
-        .query({ nativeLanguage })
+        .query({ targetLanguage })
         .set("userid", userId);
       const users = body;
       expect(status).toBe(200);

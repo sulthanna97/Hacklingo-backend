@@ -8,7 +8,14 @@ class PostController {
       const regex = new RegExp(req.query.search, "i");
       const posts = await Post.find({
         $and: [{ forumId: req.query.forumId }, { title: regex }],
-      });
+      },
+      [],
+      {
+        sort: {
+          createdAt: -1
+        }
+      }
+      );
       res.status(200).json(posts);
     } catch (err) {
       next(err);
@@ -21,8 +28,18 @@ class PostController {
         throw { name: "NotFound" };
       }
       const post = await Post.findById(req.params.id).populate([
-        "comments",
-        { path: "userId", select: "_id username email" },
+        {
+          path: "comments",
+          populate: {
+            path: "userId",
+            select: "_id username email profileImageUrl",
+          },
+          select: "_id content createdAt",
+          options: {
+            sort: { createdAt: 1 },
+          },
+        },
+        { path: "userId", select: "_id username email profileImageUrl" },
       ]);
       if (!post) {
         throw { name: "NotFound" };

@@ -7,7 +7,7 @@ async function main() {
 
   if (process.env.NODE_ENV === "production") {
     url =
-      "mongodb+srv://afnabdillah:Nevermore1@afnabdillah.x4hdysh.mongodb.net/Hacklingo_DB";
+      process.env.DATABASE_URI;
   } else if (process.env.NODE_ENV === "test") {
     url = "mongodb://127.0.0.1:27017/HacklingoDBTest";
   } else {

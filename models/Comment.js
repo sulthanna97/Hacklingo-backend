@@ -4,8 +4,9 @@ const { Schema } = mongoose;
 const commentSchema = new Schema(
   {
     userId: {
-      type: String,
-      required: [true, "User Id is required"]
+      type: Schema.Types.ObjectId,
+      required: [true, "User Id is required"],
+      ref: "User"
     },
     content: {
       type: String,

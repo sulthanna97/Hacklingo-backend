@@ -5,14 +5,18 @@ class UserController {
 
   static async findAllUsersByNativeLanguage(req, res, next) {
     try {
+      let nativeLanguages = req.query.targetLanguage;
       const users = await User.find(
-        { nativeLanguage: req.query.nativeLanguage },
+        {
+          nativeLanguage: {
+            $in: nativeLanguages,
+          },
+        },
         {
           createdAt: 0,
           updatedAt: 0,
           posts: 0,
           comments: 0,
-          profileImageUrl: 0,
           __v: 0,
           password: 0,
           articles: 0,
@@ -27,7 +31,6 @@ class UserController {
   static async findAllUsersBySearch(req, res, next) {
     try {
       const searchRegex = new RegExp(req.query.search, "i");
-      console.log(req.query.search, "<<<< masuk sini");
       const users = await User.find(
         { username: searchRegex },
         {
@@ -35,7 +38,6 @@ class UserController {
           updatedAt: 0,
           posts: 0,
           comments: 0,
-          profileImageUrl: 0,
           __v: 0,
           password: 0,
           articles: 0,
@@ -68,9 +70,19 @@ class UserController {
 
   static async insertNewUser(req, res, next) {
     try {
-      const newUser = new User({ ...req.body, profileImageUrl: req.imageUrl });
+      let targetLanguage = req.body.targetLanguage;
+      targetLanguage = JSON.parse(targetLanguage);
+      const newUser = new User({ ...req.body, targetLanguage, profileImageUrl: req.imageUrl });
       await newUser.save();
       res.status(201).json(newUser);
+    } catch (err) {
+      next(err);
+    }
+  }
+
+  static async insertChatImage(req, res, next) {
+    try {
+      res.status(201).json({chatImageUrl : req.imageUrl});
     } catch (err) {
       next(err);
     }

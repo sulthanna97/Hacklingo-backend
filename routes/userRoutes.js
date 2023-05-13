@@ -17,6 +17,7 @@ userRouter.get(
 );
 userRouter.get("/:id", userAuthentication, UserController.findUserById);
 userRouter.post("/login", UserController.login);
+userRouter.post("/chatImage", userAuthentication, uploadMiddleware, UserController.insertChatImage);
 userRouter.post("/register", uploadMiddleware, UserController.insertNewUser);
 userRouter.put(
   "/:id",
