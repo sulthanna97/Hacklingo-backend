@@ -27,7 +27,7 @@ const userSchema = new Schema(
         values: [
           "English",
           "German/Deutsch",
-          "Japanase/日本語",
+          "Japanese/日本語",
           "Indonesian/Bahasa Indonesia",
           "French/Français",
           "Spanish/Español",
@@ -55,7 +55,7 @@ const userSchema = new Schema(
           values: [
             "English",
             "German/Deutsch",
-            "Japanase/日本語",
+            "Japanese/日本語",
             "Indonesian/Bahasa Indonesia",
             "French/Français",
             "Spanish/Español",
