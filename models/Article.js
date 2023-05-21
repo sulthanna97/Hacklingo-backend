@@ -14,6 +14,9 @@ const articleSchema = new Schema(
     title: {
       type: String,
       required: [true, "Title is required"]
+    },
+    articleImageUrl: {
+      type: String
     }
   },
   { timestamps: true }

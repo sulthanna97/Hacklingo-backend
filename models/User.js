@@ -48,6 +48,9 @@ const userSchema = new Schema(
     profileImageUrl: {
       type: String,
     },
+    deviceToken: {
+      type: String,
+    },
     targetLanguage: [
       {
         type: String,

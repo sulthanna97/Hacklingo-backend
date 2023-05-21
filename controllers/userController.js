@@ -2,7 +2,6 @@ import { checkPassword } from "../helpers/bcrypt.js";
 import User from "../models/User.js";
 
 class UserController {
-
   static async findAllUsersByNativeLanguage(req, res, next) {
     try {
       let nativeLanguages = req.query.targetLanguage;
@@ -42,7 +41,7 @@ class UserController {
           password: 0,
           articles: 0,
         }
-      );
+      ).sort({username: "asc"});
       res.status(200).json(users);
     } catch (err) {
       next(err);
@@ -68,11 +67,57 @@ class UserController {
     }
   }
 
+  static async findOtherUserByEmail(req, res, next) {
+    try {
+      const user = await User.findOne(
+        { email: req.query.email },
+        {
+          createdAt: 0,
+          updatedAt: 0,
+          posts: 0,
+          comments: 0,
+          articles: 0,
+          password: 0,
+        }
+      );
+      if (!user) {
+        throw { name: "NotFound" };
+      }
+      res.status(200).json(user);
+    } catch (err) {
+      next(err);
+    }
+  }
+
+  static async findOtherUsersByEmail(req, res, next) {
+    try {
+      const userEmails = req.query.emails;
+      const users = await User.find(
+        { email: { $in: userEmails } },
+        {
+          createdAt: 0,
+          updatedAt: 0,
+          posts: 0,
+          comments: 0,
+          articles: 0,
+          password: 0,
+        }
+      );
+      res.status(200).json(users);
+    } catch (err) {
+      next(err);
+    }
+  }
+
   static async insertNewUser(req, res, next) {
     try {
       let targetLanguage = req.body.targetLanguage;
       targetLanguage = JSON.parse(targetLanguage);
-      const newUser = new User({ ...req.body, targetLanguage, profileImageUrl: req.imageUrl });
+      const newUser = new User({
+        ...req.body,
+        targetLanguage,
+        profileImageUrl: req.imageUrl,
+      });
       await newUser.save();
       res.status(201).json(newUser);
     } catch (err) {
@@ -82,7 +127,7 @@ class UserController {
 
   static async insertChatImage(req, res, next) {
     try {
-      res.status(201).json({chatImageUrl : req.imageUrl});
+      res.status(201).json({ chatImageUrl: req.imageUrl });
     } catch (err) {
       next(err);
     }
@@ -90,13 +135,25 @@ class UserController {
 
   static async login(req, res, next) {
     try {
-      const { email, password } = req.body;
+      const { email, password, deviceToken } = req.body;
       if (!email || !password) {
         throw { name: "InvalidLogin" };
       }
-      const user = await User.findOne(
+      const user = await User.findOneAndUpdate(
         { email },
-        { __v: 0, createdAt: 0, updatedAt: 0 }
+        { deviceToken },
+        {
+          returnDocument: "after",
+          runValidators: true,
+          select: {
+            createdAt: 0,
+            updatedAt: 0,
+            posts: 0,
+            comments: 0,
+            __v: 0,
+            articles: 0,
+          },
+        }
       );
       if (!user) {
         throw { name: "InvalidLogin" };
@@ -104,6 +161,34 @@ class UserController {
       const isValidPassword = checkPassword(password, user.password);
       if (!isValidPassword) {
         throw { name: "InvalidLogin" };
+      }
+      res.status(200).json(user);
+    } catch (err) {
+      next(err);
+    }
+  }
+
+  static async logout(req, res, next) {
+    try {
+      const user = await User.findByIdAndUpdate(
+        req.userId,
+        { deviceToken: "" },
+        {
+          returnDocument: "after",
+          runValidators: true,
+          select: {
+            createdAt: 0,
+            updatedAt: 0,
+            posts: 0,
+            comments: 0,
+            __v: 0,
+            password: 0,
+            articles: 0,
+          },
+        }
+      );
+      if (!user) {
+        throw { name: "NotFound" };
       }
       res.status(200).json(user);
     } catch (err) {

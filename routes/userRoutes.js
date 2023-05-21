@@ -15,6 +15,21 @@ userRouter.get(
   userAuthentication,
   UserController.findAllUsersBySearch
 );
+userRouter.get(
+  "/email",
+  userAuthentication,
+  UserController.findOtherUserByEmail
+);
+userRouter.get(
+  "/emails",
+  userAuthentication,
+  UserController.findOtherUsersByEmail
+);
+userRouter.patch(
+  "/logout",
+  userAuthentication,
+  UserController.logout
+);
 userRouter.get("/:id", userAuthentication, UserController.findUserById);
 userRouter.post("/login", UserController.login);
 userRouter.post("/chatImage", userAuthentication, uploadMiddleware, UserController.insertChatImage);
